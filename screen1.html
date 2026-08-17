@@ -1,257 +1,61 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arlene's Beans — Vertical Menu 1</title>
-<style>
-:root{
-  --adobe:#E8D7BE;
-  --paper:#FFF8EC;
-  --ink:#241B14;
-  --chile:#9E2E28;
-  --hatch:#536B3D;
-  --turquoise:#2E7774;
-  --gold:#BF8736;
-  --muted:#6D5848;
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"><title>Arlene's Beans — Screen 1</title><style>
+:root{--adobe:#e9dcc8;--paper:#fffaf1;--ink:#2b2119;--muted:#6e5b4a;--red:#9b302a;--green:#506b3f;--turquoise:#2f7773;--gold:#c28a3c;--line:rgba(43,33,25,.15)}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}
+body{font-family:Segoe UI,Arial,sans-serif;color:var(--ink);background:linear-gradient(rgba(233,220,200,.97),rgba(233,220,200,.97)),repeating-linear-gradient(135deg,transparent 0 42px,rgba(47,119,115,.04) 42px 45px)}
+body:before,body:after{content:"";position:fixed;left:0;width:100%;height:9px;background:linear-gradient(90deg,var(--red) 0 25%,var(--gold) 25% 50%,var(--turquoise) 50% 75%,var(--green) 75% 100%);z-index:20}
+body:before{top:0}body:after{bottom:0}
+.screen{width:100vw;height:100vh;padding:2.1vh 4.1vw 1.8vh;display:flex;flex-direction:column}
+.header{display:flex;justify-content:space-between;align-items:flex-end;gap:2vw;padding:.8vh 0 1.1vh;border-bottom:2px solid var(--line)}
+h1{margin:0;font-family:Georgia,serif;font-size:5.5vw;line-height:.9}
+.kicker{margin-top:.6vh;font-size:1.5vw;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.screen-title{max-width:45vw;text-align:right;font-family:Georgia,serif;color:var(--red);font-weight:800;font-size:2.35vw}
+.content{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.72vh 1.55vw;align-content:start;padding-top:.85vh}
+.category{background:rgba(255,250,241,.9);border:1px solid var(--line);border-radius:15px;padding:.62vh 1.35vw .55vh}
+.category-title{display:flex;align-items:center;gap:.8vw;margin:0 0 .25vh;font-family:Georgia,serif;font-size:1.8vw;color:var(--red);font-weight:800}
+.category-title:after{content:"";height:2px;flex:1;background:rgba(155,48,42,.2)}
+.item{padding:.08vh 0 .16vh}.top{display:flex;align-items:baseline;gap:.5vw}
+.name{font-weight:800;font-size:1.28vw;line-height:1.04}.dots{flex:1;min-width:.6vw;border-bottom:2px dotted rgba(43,33,25,.22);transform:translateY(-.25em)}
+.price{color:var(--green);font-weight:900;font-size:1.22vw;white-space:nowrap}
+.desc{margin-top:.05vh;color:var(--muted);font-size:.82vw;line-height:1.08}.variant{color:var(--turquoise);font-weight:800}.dietary{color:var(--green);font-weight:700}
+.footer{display:grid;grid-template-columns:auto 1fr auto;gap:1vw;align-items:center;border-top:1px solid var(--line);padding-top:.45vh;margin-top:.55vh;font-size:.85vw;color:var(--muted)}
+.chiles{text-align:center;font-weight:900;color:var(--ink)}.red{color:var(--red)}.green{color:var(--green)}.xmas{color:var(--turquoise)}.status{text-align:right}
+.loading,.error{grid-column:1/-1;width:90%;justify-self:center;align-self:center;padding:2vh 3vw;border-radius:18px;text-align:center;background:rgba(255,250,241,.95);border:1px solid var(--line);font-size:2vw;color:var(--muted)}
+.error strong{color:var(--red)}
+body.dense .category-title{font-size:1.55vw}body.dense .name{font-size:1.08vw}body.dense .price{font-size:1.03vw}body.dense .desc{font-size:.7vw}
+body.ultra .header{padding-bottom:.6vh}body.ultra h1{font-size:4.8vw}body.ultra .kicker{font-size:1.2vw}body.ultra .screen-title{font-size:1.95vw}
+body.ultra .content{gap:.45vh 1.05vw;padding-top:.55vh}body.ultra .category{padding:.38vh .95vw .32vh;border-radius:12px}
+body.ultra .category-title{font-size:1.32vw;margin-bottom:.08vh}body.ultra .item{padding:.02vh 0 .06vh}body.ultra .name{font-size:.92vw}body.ultra .price{font-size:.9vw}body.ultra .desc{font-size:.6vw;line-height:1.03}body.ultra .footer{font-size:.72vw}
+@media(orientation:landscape){h1{font-size:3vw}.kicker{font-size:.8vw}.screen-title{font-size:1.4vw}.category-title{font-size:1.2vw}.name,.price{font-size:.8vw}.desc{font-size:.55vw}}
+</style></head>
+<body data-screen="Screen 1"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Breakfast · Appetizers · Burritos</div></header>
+<section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
+<footer class="footer"><div>Screen 1 of 3</div><div class="chiles"><span class="red">RED</span> • <span class="green">GREEN</span> • <span class="xmas">CHRISTMAS</span></div><div id="status" class="status">Starting…</div></footer></main>
+<script>
+const SPREADSHEET_ID = "1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU";
+const SHEET_NAME = "Menu_Master";
+const TARGET_SCREEN = document.body.dataset.screen;
+const REFRESH_MS = 300000;
+const content = document.getElementById("content");
+const statusEl = document.getElementById("status");
+const clean=v=>(v===null||v===undefined?"":String(v).trim());
+const truthy=v=>v===true||v===1||v==="1"||clean(v).toLowerCase()==="true";
+const esc=s=>clean(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+function val(cell){return !cell||cell.v===null||cell.v===undefined?"":cell.v}
+function rowsFrom(table){const h=table.cols.map((c,i)=>clean(c.label)||clean(c.id)||("COL_"+i));return table.rows.map(r=>{const o={};h.forEach((x,i)=>o[x]=val(r.c[i]));return o})}
+function priceOf(r){const p=clean(r.Price_Display);if(p)return p;const v=r.Base_Price;if(v===""||v==null)return "";const n=Number(String(v).replace(/[$,]/g,""));return Number.isFinite(n)?"$"+n.toFixed(2):clean(v)}
+function density(items){const score=items.length+items.filter(x=>clean(x.Description)).length*.38;document.body.classList.remove("dense","ultra");if(TARGET_SCREEN==="Screen 3"||score>46)document.body.classList.add("ultra");else if(score>30)document.body.classList.add("dense")}
+function render(rows){
+ let items=rows.filter(r=>truthy(r.Active)&&clean(r.Screen_Suggestion)===TARGET_SCREEN);
+ items.sort((a,b)=>(Number(a.Display_Order)||99999)-(Number(b.Display_Order)||99999)||clean(a.Display_Name).localeCompare(clean(b.Display_Name)));
+ density(items);
+ const groups=[],map=new Map();
+ for(const item of items){const c=clean(item.Display_Category)||"Menu";if(!map.has(c)){const g={name:c,items:[]};map.set(c,g);groups.push(g)}map.get(c).items.push(item)}
+ if(!groups.length){content.innerHTML=`<div class="error"><strong>No items assigned to ${esc(TARGET_SCREEN)}.</strong><br>Check Active and Screen_Suggestion in Menu_Master.</div>`;return}
+ content.innerHTML=groups.map(g=>`<section class="category"><h2 class="category-title">${esc(g.name)}</h2>${g.items.map(item=>{const p=priceOf(item),v=clean(item.Variant_or_Size),d=clean(item.Dietary);let x=clean(item.Description);if(document.body.classList.contains("ultra")&&x.length>88)x=x.slice(0,85)+"…";else if(document.body.classList.contains("dense")&&x.length>125)x=x.slice(0,122)+"…";return `<article class="item"><div class="top"><span class="name">${esc(item.Display_Name)}</span>${p?`<span class="dots"></span><span class="price">${esc(p)}</span>`:""}</div>${(v||x||d)?`<div class="desc">${v?`<span class="variant">${esc(v)}</span>${x?" · ":""}`:""}${x?esc(x):""}${d?` <span class="dietary">(${esc(d)})</span>`:""}</div>`:""}</article>`}).join("")}</section>`).join("");
+ statusEl.textContent="Synced "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
 }
-*{box-sizing:border-box}
-html,body{
-  margin:0;width:100%;height:100%;overflow:hidden;
-  background:var(--adobe);color:var(--ink);
-  font-family:"Segoe UI","Trebuchet MS",Arial,sans-serif;
-}
-body{
-  background:
-    linear-gradient(rgba(232,215,190,.97),rgba(232,215,190,.97)),
-    repeating-linear-gradient(135deg, transparent 0 38px, rgba(46,119,116,.045) 38px 42px);
-}
-.screen{
-  width:100vw;height:100vh;
-  padding:3vh 4.6vw 2.6vh;
-  display:flex;flex-direction:column;
-  position:relative;
-}
-.screen::before,.screen::after{
-  content:"";
-  position:absolute;left:0;width:100%;height:.8vh;
-  background:linear-gradient(90deg,var(--chile) 0 25%,var(--gold) 25% 50%,var(--turquoise) 50% 75%,var(--hatch) 75% 100%);
-}
-.screen::before{top:0}.screen::after{bottom:0}
-.header{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:3vw;padding-bottom:1.7vh;margin-bottom:1.6vh;
-  border-bottom:2px solid rgba(36,27,20,.16);
-}
-.brand{display:flex;align-items:center;gap:2.4vw}
-.sun{
-  width:10vw;height:10vw;min-width:82px;min-height:82px;
-  max-width:120px;max-height:120px;border-radius:50%;
-  background:var(--gold);position:relative;
-  box-shadow:inset 0 0 0 8px var(--paper),0 0 0 2px var(--gold);
-}
-.sun::after{
-  content:"NM";position:absolute;inset:0;display:grid;place-items:center;
-  font-family:Georgia,serif;font-weight:800;font-size:3.2vw;color:var(--chile);
-}
-h1{
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:6.4vw;line-height:.95;margin:0;
-}
-.subtitle{
-  font-size:2vw;color:var(--muted);margin-top:.6vh;
-  text-transform:uppercase;letter-spacing:.12em;
-}
-.screen-label{
-  writing-mode:vertical-rl;transform:rotate(180deg);
-  font-size:1.7vw;font-weight:900;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--turquoise);white-space:nowrap;
-}
-.content{
-  flex:1;display:flex;flex-direction:column;gap:1.2vh;min-height:0;
-}
-.panel{
-  background:rgba(255,248,236,.90);
-  border:1px solid rgba(36,27,20,.12);
-  border-radius:22px;
-  padding:1.45vh 3.2vw 1.2vh;
-  box-shadow:0 8px 24px rgba(65,42,22,.055);
-}
-.panel.compact{padding-top:1.2vh;padding-bottom:1vh}
-.section-title{
-  display:flex;align-items:center;gap:1.6vw;
-  font-family:Georgia,serif;font-size:4.05vw;
-  color:var(--chile);margin:0 0 .9vh;font-weight:800;
-}
-.section-title::after{content:"";height:2px;flex:1;background:rgba(158,46,40,.20)}
-.two-col{
-  display:grid;grid-template-columns:1fr 1fr;column-gap:5vw;row-gap:.15vh;
-}
-.item{margin:.42vh 0 .68vh}
-.item-row{display:flex;gap:1.5vw;align-items:baseline}
-.name{font-size:2.65vw;font-weight:800;line-height:1.05}
-.dots{flex:1;border-bottom:2px dotted rgba(36,27,20,.24);transform:translateY(-.3em)}
-.price{font-size:2.55vw;font-weight:900;color:var(--hatch);white-space:nowrap}
-.desc{
-  font-size:1.82vw;line-height:1.26;color:var(--muted);
-  margin-top:.24vh;padding-right:1vw;
-}
-.badge{
-  display:inline-block;font-size:1.38vw;font-weight:900;
-  letter-spacing:.08em;text-transform:uppercase;color:white;
-  background:var(--turquoise);padding:.22em .55em;border-radius:999px;
-}
-.callout{
-  margin-top:.7vh;padding:.75vh 2.2vw;
-  border-left:5px solid var(--gold);
-  background:rgba(191,135,54,.10);
-  font-size:1.72vw;line-height:1.25;color:var(--muted);
-}
-.footer{
-  display:grid;grid-template-columns:auto 1fr auto;
-  align-items:center;gap:2vw;
-  margin-top:1.2vh;font-size:1.45vw;color:var(--muted);
-}
-.chiles{text-align:center;font-weight:800;color:var(--ink)}
-.red{color:var(--chile)}.green{color:var(--hatch)}.xmas{color:var(--turquoise)}
-.small{font-size:1.5vw}
-@media(max-width:700px){
-  .name{font-size:3vw}.price{font-size:2.9vw}.desc{font-size:2vw}
-}
-</style>
-</head>
-<body>
-<main class="screen">
-<header class="header">
-  <div class="brand">
-    <div class="sun"></div>
-    <div>
-      <h1>Arlene's Beans</h1>
-      <div class="subtitle">Family New Mexican Cooking</div>
-    </div>
-  </div>
-  <div class="screen-label">Breakfast & Burritos</div>
-</header>
-
-<section class="content">
-
-<article class="panel">
-  <h2 class="section-title">Breakfast <span class="badge">until 2pm</span></h2>
-  <div class="two-col">
-    <div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Los Padilla's Breakfast Burrito</span><span class="dots"></span><span class="price">$—</span></div>
-      <div class="desc">Eggs, potatoes, breakfast meats and cheese. Wrapped or smothered.</div>
-    </div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Breakfast Chimichanga</span><span class="dots"></span><span class="price">$—</span></div>
-      <div class="desc">Crispy breakfast burrito, smothered in your choice of chile.</div>
-    </div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Breakfast Tacos</span><span class="dots"></span><span class="price">$—</span></div>
-      
-    </div>
-    </div>
-    <div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Chilaquiles</span><span class="dots"></span><span class="price">$—</span></div>
-      
-    </div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Huevos Rancheros</span><span class="dots"></span><span class="price">$—</span></div>
-      
-    </div>
-      <div class="callout">Breakfast favorites made with bold New Mexican flavor and Hatch chile options.</div>
-    </div>
-  </div>
-</article>
-
-<article class="panel">
-  <h2 class="section-title">Classic Burritos</h2>
-  <div class="two-col">
-    <div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Bean, Cheese & Rice</span><span class="dots"></span><span class="price">$—</span></div>
-      
-    </div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Bean, Cheese, Rice & Chile</span><span class="dots"></span><span class="price">$—</span></div>
-      
-    </div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Smothered Bean & Cheese</span><span class="dots"></span><span class="price">$—</span></div>
-      
-    </div>
-    </div>
-    <div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Junior</span><span class="dots"></span><span class="price">$—</span></div>
-      <div class="desc">Chile or salsa, cheese, rice and beans in a large flour tortilla.</div>
-    </div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Relleno Burrito</span><span class="dots"></span><span class="price">$—</span></div>
-      <div class="desc">Chile relleno, beans, cheese and Hatch green chile.</div>
-    </div>
-    </div>
-  </div>
-</article>
-
-<article class="panel">
-  <h2 class="section-title">Signature Burritos</h2>
-  <div class="two-col">
-    <div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">The Lobo Jr.</span><span class="dots"></span><span class="price">$—</span></div>
-      <div class="desc">Carne asada, stoplight peppers, grilled onions, beans and rice.</div>
-    </div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">The Lobo</span><span class="dots"></span><span class="price">$—</span></div>
-      <div class="desc">Signature smothered burrito with carne asada, peppers, onions, beans and rice.</div>
-    </div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">G-Rito</span><span class="dots"></span><span class="price">$—</span></div>
-      <div class="desc">Double wrapped, carne asada, rice, queso blanco and red chile salsa.</div>
-    </div>
-    </div>
-    <div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Breaking Bad</span><span class="dots"></span><span class="price">$—</span></div>
-      <div class="desc">Steak, fries, lettuce, pico de gallo, cheese and avocado cream.</div>
-    </div>
-      
-    <div class="item">
-      <div class="item-row"><span class="name">Heisenberg</span><span class="dots"></span><span class="price">$—</span></div>
-      <div class="desc">Beans, cheese, chopped Hatch green chile and steak.</div>
-    </div>
-    </div>
-  </div>
-</article>
-
-</section>
-
-<footer class="footer">
-  <div>Screen 1 of 3</div>
-  <div class="chiles">Choose your chile:
-    <span class="red">Red</span> •
-    <span class="green">Green</span> •
-    <span class="xmas">Christmas</span>
-  </div>
-  <div>Prices & availability subject to change</div>
-</footer>
-</main>
-</body>
-</html>
+function fail(m){statusEl.textContent="Connection error";content.innerHTML=`<div class="error"><strong>Google Sheets could not be loaded.</strong><br>${esc(m)}<br><small>Keep the Sheet shared as Anyone with the link – Viewer.</small></div>`}
+window.arlenesMenuCallback=function(resp){try{if(!resp||!resp.table)throw new Error("Google returned no table data.");render(rowsFrom(resp.table))}catch(e){fail(e.message||String(e))}};
+function load(){statusEl.textContent="Syncing…";const old=document.getElementById("gsheet-loader");if(old)old.remove();const s=document.createElement("script");s.id="gsheet-loader";s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(SHEET_NAME)+"&tqx=responseHandler:arlenesMenuCallback&tq="+encodeURIComponent("select *")+"&headers=1&_="+Date.now();s.onerror=()=>fail("The Google Sheets endpoint did not respond.");document.body.appendChild(s)}
+load();setInterval(load,REFRESH_MS);
+</script></body></html>
