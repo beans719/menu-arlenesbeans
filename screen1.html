@@ -59,30 +59,3 @@ window.arlenesMenuCallback=function(resp){try{if(!resp||!resp.table)throw new Er
 function load(){statusEl.textContent="Syncing…";const old=document.getElementById("gsheet-loader");if(old)old.remove();const s=document.createElement("script");s.id="gsheet-loader";s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(SHEET_NAME)+"&tqx=responseHandler:arlenesMenuCallback&tq="+encodeURIComponent("select *")+"&headers=1&_="+Date.now();s.onerror=()=>fail("The Google Sheets endpoint did not respond.");document.body.appendChild(s)}
 load();setInterval(load,REFRESH_MS);
 </script></body></html>
-PROTEIN SELECTION // 
-<div class="protein-row">
-  <div class="protein-option">
-    <img src="assets/protein-icons/cow.svg" alt="">
-    <span>Ground Beef</span>
-  </div>
-
-  <div class="protein-option">
-    <img src="assets/protein-icons/chicken.svg" alt="">
-    <span>Chicken</span>
-  </div>
-
-  <div class="protein-option">
-    <img src="assets/protein-icons/pig.svg" alt="">
-    <span>Pork</span>
-  </div>
-
-  <div class="protein-option">
-    <img src="assets/protein-icons/steak.svg" alt="">
-    <span>Carne Asada</span>
-  </div>
-
-  <div class="protein-option">
-    <img src="assets/protein-icons/veggie.svg" alt="">
-    <span>Veggie</span>
-  </div>
-</div>
