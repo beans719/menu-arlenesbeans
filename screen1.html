@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"><title>Arlene's Beans — Screen 2</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"><title>Arlene's Beans — Screen 1</title><style>
 :root{--adobe:#e9dcc8;--paper:#fffaf1;--ink:#2b2119;--muted:#6e5b4a;--red:#9b302a;--green:#506b3f;--turquoise:#2f7773;--gold:#c28a3c;--line:rgba(43,33,25,.15)}
 *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}
 body{font-family:Segoe UI,Arial,sans-serif;color:var(--ink);background:linear-gradient(rgba(233,220,200,.97),rgba(233,220,200,.97)),repeating-linear-gradient(135deg,transparent 0 42px,rgba(47,119,115,.04) 42px 45px)}
@@ -27,9 +27,9 @@ body.ultra .content{gap:.45vh 1.05vw;padding-top:.55vh}body.ultra .category{padd
 body.ultra .category-title{font-size:1.32vw;margin-bottom:.08vh}body.ultra .item{padding:.02vh 0 .06vh}body.ultra .name{font-size:.92vw}body.ultra .price{font-size:.9vw}body.ultra .desc{font-size:.6vw;line-height:1.03}body.ultra .footer{font-size:.72vw}
 @media(orientation:landscape){h1{font-size:3vw}.kicker{font-size:.8vw}.screen-title{font-size:1.4vw}.category-title{font-size:1.2vw}.name,.price{font-size:.8vw}.desc{font-size:.55vw}}
 </style></head>
-<body data-screen="Screen 2"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Smothered Burritos · Plates</div></header>
+<body data-screen="Screen 1"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Breakfast · Appetizers · Burritos</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
-<footer class="footer"><div>Screen 2 of 3</div><div class="chiles"><span class="red">RED</span> • <span class="green">GREEN</span> • <span class="xmas">CHRISTMAS</span></div><div id="status" class="status">Starting…</div></footer></main>
+<footer class="footer"><div>Screen 1 of 3</div><div class="chiles"><span class="red">RED</span> • <span class="green">GREEN</span> • <span class="xmas">CHRISTMAS</span></div><div id="status" class="status">Starting…</div></footer></main>
 <script>
 const SPREADSHEET_ID = "1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU";
 const SHEET_NAME = "Menu_Master";
@@ -59,30 +59,3 @@ window.arlenesMenuCallback=function(resp){try{if(!resp||!resp.table)throw new Er
 function load(){statusEl.textContent="Syncing…";const old=document.getElementById("gsheet-loader");if(old)old.remove();const s=document.createElement("script");s.id="gsheet-loader";s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(SHEET_NAME)+"&tqx=responseHandler:arlenesMenuCallback&tq="+encodeURIComponent("select *")+"&headers=1&_="+Date.now();s.onerror=()=>fail("The Google Sheets endpoint did not respond.");document.body.appendChild(s)}
 load();setInterval(load,REFRESH_MS);
 </script></body></html>
-PROTEIN SELECTION // 
-<div class="protein-row">
-  <div class="protein-option">
-    <img src="assets/protein-icons/cow.svg" alt="">
-    <span>Ground Beef</span>
-  </div>
-
-  <div class="protein-option">
-    <img src="assets/protein-icons/chicken.svg" alt="">
-    <span>Chicken</span>
-  </div>
-
-  <div class="protein-option">
-    <img src="assets/protein-icons/pig.svg" alt="">
-    <span>Pork</span>
-  </div>
-
-  <div class="protein-option">
-    <img src="assets/protein-icons/steak.svg" alt="">
-    <span>Carne Asada</span>
-  </div>
-
-  <div class="protein-option">
-    <img src="assets/protein-icons/veggie.svg" alt="">
-    <span>Veggie</span>
-  </div>
-</div>
