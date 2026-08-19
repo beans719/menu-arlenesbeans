@@ -1,4 +1,11 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"><title>Arlene's Beans — Screen 1</title><style>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<title>Arlene's Beans — Screen 1</title>
+<style>
 :root{--adobe:#e9dcc8;--paper:#fffaf1;--ink:#2b2119;--muted:#6e5b4a;--red:#9b302a;--green:#506b3f;--turquoise:#2f7773;--gold:#c28a3c;--line:rgba(43,33,25,.15)}
 *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}
 body{font-family:Segoe UI,Arial,sans-serif;color:var(--ink);background:linear-gradient(rgba(233,220,200,.97),rgba(233,220,200,.97)),repeating-linear-gradient(135deg,transparent 0 42px,rgba(47,119,115,.04) 42px 45px)}
@@ -11,12 +18,20 @@ h1{margin:0;font-family:Georgia,serif;font-size:5.5vw;line-height:.9}
 .screen-title{max-width:45vw;text-align:right;font-family:Georgia,serif;color:var(--red);font-weight:800;font-size:2.35vw}
 .content{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.72vh 1.55vw;align-content:start;padding-top:.85vh}
 .category{background:rgba(255,250,241,.9);border:1px solid var(--line);border-radius:15px;padding:.62vh 1.35vw .55vh}
+.category.expanded{grid-column:1/-1;padding:.7vh 1.35vw .68vh}
 .category-title{display:flex;align-items:center;gap:.8vw;margin:0 0 .25vh;font-family:Georgia,serif;font-size:1.8vw;color:var(--red);font-weight:800}
 .category-title:after{content:"";height:2px;flex:1;background:rgba(155,48,42,.2)}
+.expanded-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:2vw}
 .item{padding:.08vh 0 .16vh}.top{display:flex;align-items:baseline;gap:.5vw}
 .name{font-weight:800;font-size:1.28vw;line-height:1.04}.dots{flex:1;min-width:.6vw;border-bottom:2px dotted rgba(43,33,25,.22);transform:translateY(-.25em)}
 .price{color:var(--green);font-weight:900;font-size:1.22vw;white-space:nowrap}
 .desc{margin-top:.05vh;color:var(--muted);font-size:.82vw;line-height:1.08}.variant{color:var(--turquoise);font-weight:800}.dietary{color:var(--green);font-weight:700}
+.protein-gallery{margin-top:.46vh;padding-top:.45vh;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(var(--protein-cols,5),minmax(0,1fr));gap:.65vw}
+.protein{min-width:0;display:grid;grid-template-columns:3.2vw minmax(0,1fr);align-items:center;gap:.48vw;padding:.3vh .48vw;border-radius:10px;background:rgba(233,220,200,.42)}
+.protein-art{width:3.2vw;height:3.2vw;min-width:34px;min-height:34px;max-width:58px;max-height:58px;border-radius:50%;object-fit:cover;background:rgba(255,250,241,.9);border:1px solid rgba(43,33,25,.12)}
+.protein-fallback{display:grid;place-items:center;overflow:hidden;position:relative}
+.protein-fallback:before{content:"";width:72%;height:46%;margin-top:22%;border-radius:50% 50% 42% 42%;background:linear-gradient(150deg,var(--gold),var(--red));box-shadow:-.38vw -.16vw 0 -.22vw var(--green),.42vw -.1vw 0 -.24vw var(--turquoise)}
+.protein-name{font-size:.76vw;font-weight:900;line-height:1.02}.protein-price{margin-top:.09vh;color:var(--green);font-size:.66vw;font-weight:800;line-height:1}.protein-badge{color:var(--red)}
 .footer{display:grid;grid-template-columns:auto 1fr auto;gap:1vw;align-items:center;border-top:1px solid var(--line);padding-top:.45vh;margin-top:.55vh;font-size:.85vw;color:var(--muted)}
 .chiles{text-align:center;font-weight:900;color:var(--ink)}.red{color:var(--red)}.green{color:var(--green)}.xmas{color:var(--turquoise)}.status{text-align:right}
 .loading,.error{grid-column:1/-1;width:90%;justify-self:center;align-self:center;padding:2vh 3vw;border-radius:18px;text-align:center;background:rgba(255,250,241,.95);border:1px solid var(--line);font-size:2vw;color:var(--muted)}
@@ -25,37 +40,120 @@ body.dense .category-title{font-size:1.55vw}body.dense .name{font-size:1.08vw}bo
 body.ultra .header{padding-bottom:.6vh}body.ultra h1{font-size:4.8vw}body.ultra .kicker{font-size:1.2vw}body.ultra .screen-title{font-size:1.95vw}
 body.ultra .content{gap:.45vh 1.05vw;padding-top:.55vh}body.ultra .category{padding:.38vh .95vw .32vh;border-radius:12px}
 body.ultra .category-title{font-size:1.32vw;margin-bottom:.08vh}body.ultra .item{padding:.02vh 0 .06vh}body.ultra .name{font-size:.92vw}body.ultra .price{font-size:.9vw}body.ultra .desc{font-size:.6vw;line-height:1.03}body.ultra .footer{font-size:.72vw}
+body.ultra .protein-gallery{margin-top:.25vh;padding-top:.25vh}body.ultra .protein{padding:.12vh .35vw}body.ultra .protein-name{font-size:.66vw}body.ultra .protein-price{font-size:.58vw}
 @media(orientation:landscape){h1{font-size:3vw}.kicker{font-size:.8vw}.screen-title{font-size:1.4vw}.category-title{font-size:1.2vw}.name,.price{font-size:.8vw}.desc{font-size:.55vw}}
-</style></head>
-<body data-screen="Screen 1"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Breakfast · Appetizers · Burritos</div></header>
+</style>
+</head>
+<body data-screen="Screen 1">
+<main class="screen">
+<header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Breakfast · Appetizers · Burritos · Tacos</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
-<footer class="footer"><div>Screen 1 of 3</div><div class="chiles"><span class="red">RED</span> • <span class="green">GREEN</span> • <span class="xmas">CHRISTMAS</span></div><div id="status" class="status">Starting…</div></footer></main>
+<footer class="footer"><div>Screen 1 of 3</div><div class="chiles"><span class="red">RED</span> • <span class="green">GREEN</span> • <span class="xmas">CHRISTMAS</span></div><div id="status" class="status">Starting…</div></footer>
+</main>
 <script>
-const SPREADSHEET_ID = "1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU";
-const SHEET_NAME = "Menu_Master";
-const TARGET_SCREEN = document.body.dataset.screen;
-const REFRESH_MS = 300000;
-const content = document.getElementById("content");
-const statusEl = document.getElementById("status");
+const SPREADSHEET_ID="1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU";
+const MASTER_SHEET="Menu_Master";
+const TACOS_SHEET="Tacos Panel de control";
+const TARGET_SCREEN=document.body.dataset.screen;
+const REFRESH_MS=300000;
+const content=document.getElementById("content");
+const statusEl=document.getElementById("status");
 const clean=v=>(v===null||v===undefined?"":String(v).trim());
-const truthy=v=>v===true||v===1||v==="1"||clean(v).toLowerCase()==="true";
+const truthy=v=>v===true||v===1||v==="1"||["true","yes","si","sí","active"].includes(clean(v).toLowerCase());
 const esc=s=>clean(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-function val(cell){return !cell||cell.v===null||cell.v===undefined?"":cell.v}
-function rowsFrom(table){const h=table.cols.map((c,i)=>clean(c.label)||clean(c.id)||("COL_"+i));return table.rows.map(r=>{const o={};h.forEach((x,i)=>o[x]=val(r.c[i]));return o})}
-function priceOf(r){const p=clean(r.Price_Display);if(p)return p;const v=r.Base_Price;if(v===""||v==null)return "";const n=Number(String(v).replace(/[$,]/g,""));return Number.isFinite(n)?"$"+n.toFixed(2):clean(v)}
-function density(items){const score=items.length+items.filter(x=>clean(x.Description)).length*.38;document.body.classList.remove("dense","ultra");if(TARGET_SCREEN==="Screen 3"||score>46)document.body.classList.add("ultra");else if(score>30)document.body.classList.add("dense")}
-function render(rows){
- let items=rows.filter(r=>truthy(r.Active)&&clean(r.Screen_Suggestion)===TARGET_SCREEN);
- items.sort((a,b)=>(Number(a.Display_Order)||99999)-(Number(b.Display_Order)||99999)||clean(a.Display_Name).localeCompare(clean(b.Display_Name)));
- density(items);
- const groups=[],map=new Map();
- for(const item of items){const c=clean(item.Display_Category)||"Menu";if(!map.has(c)){const g={name:c,items:[]};map.set(c,g);groups.push(g)}map.get(c).items.push(item)}
- if(!groups.length){content.innerHTML=`<div class="error"><strong>No items assigned to ${esc(TARGET_SCREEN)}.</strong><br>Check Active and Screen_Suggestion in Menu_Master.</div>`;return}
- content.innerHTML=groups.map(g=>`<section class="category"><h2 class="category-title">${esc(g.name)}</h2>${g.items.map(item=>{const p=priceOf(item),v=clean(item.Variant_or_Size),d=clean(item.Dietary);let x=clean(item.Description);if(document.body.classList.contains("ultra")&&x.length>88)x=x.slice(0,85)+"…";else if(document.body.classList.contains("dense")&&x.length>125)x=x.slice(0,122)+"…";return `<article class="item"><div class="top"><span class="name">${esc(item.Display_Name)}</span>${p?`<span class="dots"></span><span class="price">${esc(p)}</span>`:""}</div>${(v||x||d)?`<div class="desc">${v?`<span class="variant">${esc(v)}</span>${x?" · ":""}`:""}${x?esc(x):""}${d?` <span class="dietary">(${esc(d)})</span>`:""}</div>`:""}</article>`}).join("")}</section>`).join("");
- statusEl.textContent="Synced "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+const cellValue=cell=>!cell||cell.v===null||cell.v===undefined?"":cell.v;
+const tableRows=table=>(table.rows||[]).map(r=>(table.cols||[]).map((_,i)=>cellValue((r.c||[])[i])));
+
+function objectRows(table){
+ const headers=(table.cols||[]).map((c,i)=>clean(c.label)||clean(c.id)||("COL_"+i));
+ return (table.rows||[]).map(r=>{const o={};headers.forEach((h,i)=>o[h]=cellValue((r.c||[])[i]));return o});
 }
-function fail(m){statusEl.textContent="Connection error";content.innerHTML=`<div class="error"><strong>Google Sheets could not be loaded.</strong><br>${esc(m)}<br><small>Keep the Sheet shared as Anyone with the link – Viewer.</small></div>`}
-window.arlenesMenuCallback=function(resp){try{if(!resp||!resp.table)throw new Error("Google returned no table data.");render(rowsFrom(resp.table))}catch(e){fail(e.message||String(e))}};
-function load(){statusEl.textContent="Syncing…";const old=document.getElementById("gsheet-loader");if(old)old.remove();const s=document.createElement("script");s.id="gsheet-loader";s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(SHEET_NAME)+"&tqx=responseHandler:arlenesMenuCallback&tq="+encodeURIComponent("select *")+"&headers=1&_="+Date.now();s.onerror=()=>fail("The Google Sheets endpoint did not respond.");document.body.appendChild(s)}
+function loadSheet(sheet,headers){
+ return new Promise((resolve,reject)=>{
+  const callback="arlenes_"+Math.random().toString(36).slice(2);
+  const script=document.createElement("script");
+  const timer=setTimeout(()=>finish(new Error(sheet+" timed out.")),15000);
+  function finish(error,data){clearTimeout(timer);delete window[callback];script.remove();error?reject(error):resolve(data)}
+  window[callback]=response=>response&&response.table?finish(null,response.table):finish(new Error("Google returned no data for "+sheet+"."));
+  script.onerror=()=>finish(new Error("The Google Sheets endpoint did not respond for "+sheet+"."));
+  script.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(sheet)+"&tqx=responseHandler:"+callback+"&tq="+encodeURIComponent("select *")+"&headers="+headers+"&_="+Date.now();
+  document.body.appendChild(script);
+ });
+}
+function rowsToObjects(rows,headerIndex,endIndex){
+ const headers=(rows[headerIndex]||[]).map(clean);
+ return rows.slice(headerIndex+1,endIndex).filter(r=>r.some(v=>clean(v))).map(r=>{const o={};headers.forEach((h,i)=>{if(h)o[h]=r[i]??""});return o});
+}
+function parseTacos(table){
+ const rows=tableRows(table);
+ const marker=name=>rows.findIndex(r=>clean(r[0]).toUpperCase()===name);
+ const settingsTitle=marker("AJUSTES DE LA SECCIÓN");
+ const itemsTitle=marker("PLATILLOS DE LA SECCIÓN");
+ const proteinsTitle=marker("GALERÍA DE PROTEÍNAS");
+ if(settingsTitle<0||itemsTitle<0||proteinsTitle<0)throw new Error("The Tacos control panel structure is incomplete.");
+ const settings={};
+ for(let i=settingsTitle+2;i<itemsTitle;i++){if(clean(rows[i]?.[0]))settings[clean(rows[i][0])]=rows[i][1]??""}
+ const itemEnd=rows.findIndex((r,i)=>i>itemsTitle+1&&!r.some(v=>clean(v)));
+ const proteinEnd=rows.findIndex((r,i)=>i>proteinsTitle+1&&!r.some(v=>clean(v)));
+ return {
+  settings,
+  items:rowsToObjects(rows,itemsTitle+1,itemEnd<0?proteinsTitle:itemEnd),
+  proteins:rowsToObjects(rows,proteinsTitle+1,proteinEnd<0?rows.length:proteinEnd)
+ };
+}
+function priceOf(item){
+ const display=clean(item.Price_Display);if(display)return display;
+ const value=item.Base_Price;if(value===""||value==null)return "";
+ const number=Number(String(value).replace(/[$,]/g,""));return Number.isFinite(number)?"$"+number.toFixed(2):clean(value);
+}
+function sortByOrder(a,b){return (Number(a.Display_Order)||99999)-(Number(b.Display_Order)||99999)||clean(a.Display_Name).localeCompare(clean(b.Display_Name))}
+function itemHTML(item){
+ const price=priceOf(item),variant=clean(item.Variant_or_Size),dietary=clean(item.Dietary);let description=clean(item.Description);
+ if(document.body.classList.contains("ultra")&&description.length>88)description=description.slice(0,85)+"…";
+ else if(document.body.classList.contains("dense")&&description.length>125)description=description.slice(0,122)+"…";
+ return `<article class="item"><div class="top"><span class="name">${esc(item.Display_Name)}</span>${price?`<span class="dots"></span><span class="price">${esc(price)}</span>`:""}</div>${variant||description||dietary?`<div class="desc">${variant?`<span class="variant">${esc(variant)}</span>${description?" · ":""}`:""}${description?esc(description):""}${dietary?` <span class="dietary">(${esc(dietary)})</span>`:""}</div>`:""}</article>`;
+}
+function proteinHTML(protein){
+ const image=clean(protein.Image_URL),alt=clean(protein.Image_Alt_Text)||clean(protein.Protein_Name),badge=clean(protein.Badge),price=clean(protein.Price_Display);
+ const art=image?`<img class="protein-art" src="${esc(image)}" alt="${esc(alt)}" onerror="this.outerHTML='<span class=&quot;protein-art protein-fallback&quot; aria-label=&quot;${esc(alt)}&quot;></span>'">`:`<span class="protein-art protein-fallback" aria-label="${esc(alt)}"></span>`;
+ return `<div class="protein">${art}<div><div class="protein-name">${esc(protein.Protein_Name)}</div>${price?`<div class="protein-price">${badge?`<span class="protein-badge">${esc(badge)}</span> · `:""}${esc(price)}</div>`:""}</div></div>`;
+}
+function density(count,descriptions,proteinCount){
+ const score=count+descriptions*.38+proteinCount*.55;document.body.classList.remove("dense","ultra");
+ if(score>46)document.body.classList.add("ultra");else if(score>30)document.body.classList.add("dense");
+}
+function render(masterRows,tacos){
+ let master=masterRows.filter(r=>truthy(r.Active)&&clean(r.Screen_Suggestion)===TARGET_SCREEN);
+ const tacosActive=truthy(tacos.settings.Section_Active)&&clean(tacos.settings.Screen)===TARGET_SCREEN;
+ const tacosTitle=clean(tacos.settings.Section_Title)||"Tacos & Taquitos";
+ if(tacosActive)master=master.filter(r=>clean(r.Display_Category).toLowerCase()!==tacosTitle.toLowerCase()&&!clean(r.Display_Category).toLowerCase().includes("taco"));
+ master.sort(sortByOrder);
+ const groups=[],map=new Map();
+ for(const item of master){const category=clean(item.Display_Category)||"Menu";if(!map.has(category)){const group={type:"regular",name:category,order:Number(item.Display_Order)||99999,items:[]};map.set(category,group);groups.push(group)}map.get(category).items.push(item)}
+ let activeProteins=[];
+ if(tacosActive){
+  const items=tacos.items.filter(i=>truthy(i.Active)).sort(sortByOrder);
+  activeProteins=tacos.proteins.filter(p=>truthy(p.Active)).sort((a,b)=>(Number(a.Display_Order)||99999)-(Number(b.Display_Order)||99999));
+  groups.push({type:"tacos",name:tacosTitle,order:Number(tacos.settings.Section_Order)||99999,items,proteins:activeProteins,columns:Math.max(1,Math.min(6,Number(tacos.settings.Protein_Columns)||5)),showProteins:truthy(tacos.settings.Show_Protein_Gallery)});
+ }
+ groups.sort((a,b)=>a.order-b.order);
+ const allItems=groups.flatMap(g=>g.items);density(allItems.length,allItems.filter(i=>clean(i.Description)).length,activeProteins.length);
+ if(!groups.length){content.innerHTML=`<div class="error"><strong>No items assigned to ${esc(TARGET_SCREEN)}.</strong><br>Check the control panels and Menu_Master.</div>`;return}
+ content.innerHTML=groups.map(group=>{
+  if(group.type==="tacos")return `<section class="category expanded"><h2 class="category-title">${esc(group.name)}</h2><div class="expanded-items">${group.items.map(itemHTML).join("")}</div>${group.showProteins&&group.proteins.length?`<div class="protein-gallery" style="--protein-cols:${group.columns}">${group.proteins.map(proteinHTML).join("")}</div>`:""}</section>`;
+  return `<section class="category"><h2 class="category-title">${esc(group.name)}</h2>${group.items.map(itemHTML).join("")}</section>`;
+ }).join("");
+ statusEl.textContent="Synced "+new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+}
+function fail(message){statusEl.textContent="Connection error";content.innerHTML=`<div class="error"><strong>Google Sheets could not be loaded.</strong><br>${esc(message)}<br><small>Keep the Sheet shared as Anyone with the link – Viewer.</small></div>`}
+async function load(){
+ statusEl.textContent="Syncing…";
+ try{
+  const [masterTable,tacosTable]=await Promise.all([loadSheet(MASTER_SHEET,1),loadSheet(TACOS_SHEET,0)]);
+  render(objectRows(masterTable),parseTacos(tacosTable));
+ }catch(error){fail(error.message||String(error))}
+}
 load();setInterval(load,REFRESH_MS);
-</script></body></html>
+</script>
+</body>
+</html>
