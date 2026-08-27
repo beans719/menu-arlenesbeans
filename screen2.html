@@ -66,12 +66,13 @@ body.ultra .category-title{font-size:1.4vw;margin-bottom:.08vh}body.ultra .item{
 .item,body.dense .item,body.ultra .item{border-bottom:0!important}
 .burrito-category .category-head{justify-content:flex-start}.burrito-category .category-head .category-title{flex:0 0 auto}.burrito-category .section-chiles{margin-left:0;font-size:calc(.59vw + 2pt)}.burrito-category .section-chiles .chile-dot{width:calc(.82vw + 2pt);height:calc(.82vw + 2pt)}
 .burrito-category .desc,body.dense .burrito-category .desc{font-size:calc(1vw + 1pt)}
-.item-badges{display:inline-flex;align-items:center;gap:.3vw;margin-right:.42vw;vertical-align:.08em}.menu-badge{display:inline-flex;align-items:center;justify-content:center;color:var(--red);font-style:normal;font-weight:800;line-height:1;white-space:nowrap}.badge-crown{width:1.25vw;height:1.25vw;border:1px solid currentColor;border-radius:50%;font-size:.78vw}.badge-best{padding:.18em .48em;border-left:3px solid var(--gold);background:rgba(184,134,62,.1);font-size:.62vw;letter-spacing:.04em}.badge-heart{font-size:1.28vw;color:var(--red)}
+.item-badges{display:inline-flex;align-items:center;gap:.3vw;margin-right:.42vw;vertical-align:.08em}.menu-badge{display:inline-flex;align-items:center;justify-content:center;color:#2166B1;font-style:normal;font-weight:800;line-height:1;white-space:nowrap}.badge-crown{width:calc(1.25vw + 2pt);height:calc(1.25vw + 2pt);border:1px solid currentColor;border-radius:50%;font-size:calc(.78vw + 2pt)}.badge-best{padding:.18em .48em;border-left:3px solid #2166B1;background:rgba(33,102,177,.1);font-size:calc(.62vw + 2pt);letter-spacing:.04em}.badge-heart{font-size:calc(1.28vw + 2pt);color:#2166B1}
 .item-proteins{display:flex;align-items:baseline;gap:.45vw;margin-top:.12vh;color:var(--muted)}.item-proteins-label{flex:0 0 auto;color:var(--red);font-size:.72vw;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.item-proteins .protein-tags{width:auto}.item-proteins .protein-tag,.item-proteins .protein-tag:nth-child(n),.item-proteins .protein-tag.upcharge{font-size:.9vw;font-weight:600}
+.special-ticker{position:fixed;left:0;right:0;bottom:0;z-index:40;height:3.25vh;display:none;align-items:center;overflow:hidden;background:#A51F25;color:#fff;border-top:1px solid rgba(255,255,255,.32);box-shadow:0 -3px 12px rgba(53,42,32,.18)}.special-ticker.active{display:flex}.special-ticker-track{display:flex;width:max-content;min-width:200%;animation:special-ticker-scroll var(--ticker-duration,80s) linear infinite;will-change:transform}.special-ticker-copy{flex:0 0 50%;padding-left:100vw;padding-right:5vw;font-size:1.25vw;font-weight:800;letter-spacing:.045em;white-space:nowrap;text-transform:none}@keyframes special-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}body.ticker-visible .screen{padding-bottom:4.15vh}body.ticker-visible .footer{margin-bottom:.15vh}
 </style></head>
 <body data-screen="Screen 2"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Burritos in Foil · Smothered Burritos</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
-<footer class="footer"><div>Screen 2 of 3</div><div class="chiles"><span class="chile-key"><i class="chile-dot c-green"></i>Green</span><span class="chile-key"><i class="chile-dot c-red"></i>Red</span><span class="chile-key"><i class="chile-dot c-xmas"></i>Christmas</span></div><div id="status" class="status">Starting…</div></footer></main>
+<footer class="footer"><div>Screen 2 of 3</div><div class="chiles"><span class="chile-key"><i class="chile-dot c-green"></i>Green</span><span class="chile-key"><i class="chile-dot c-red"></i>Red</span><span class="chile-key"><i class="chile-dot c-xmas"></i>Christmas</span></div><div id="status" class="status">Starting…</div></footer></main><aside id="special-ticker" class="special-ticker" aria-hidden="true"><div class="special-ticker-track"><span class="special-ticker-copy"></span><span class="special-ticker-copy" aria-hidden="true"></span></div></aside>
 <script>
 const SPREADSHEET_ID = "1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU";
 const SHEET_NAME = "Menu_Master";
@@ -81,6 +82,7 @@ const TARGET_SCREEN = document.body.dataset.screen;
 const REFRESH_MS = 300000;
 const content = document.getElementById("content");
 const statusEl = document.getElementById("status");
+const tickerEl = document.getElementById("special-ticker");
 const clean=v=>(v===null||v===undefined?"":String(v).trim());
 const truthy=v=>v===true||v===1||v==="1"||clean(v).toLowerCase()==="true";
 const esc=s=>clean(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
@@ -166,6 +168,15 @@ function categoryIntro(name){
  return "";
 }
 function badgesFor(item){const b=badgesById.get(clean(item.Menu_ID));if(!b)return "";let out="";if(b.crown)out+=`<span class="menu-badge badge-crown" aria-label="House favorite">♛</span>`;if(b.best)out+=`<span class="menu-badge badge-best">BEST SELLER</span>`;if(b.heart)out+=`<span class="menu-badge badge-heart" aria-label="Favorite">♡</span>`;return out?`<span class="item-badges">${out}</span>`:""}
+function updateTicker(functionRows){
+ const row=functionRows.find(r=>clean(r.Function).toLowerCase()==="ticker");
+ const enabled=!!row&&truthy(row.Active)&&truthy(row["screen 2"]);
+ const text=enabled?clean(row["Text / Value"]):"";
+ const speed=clean(row&&row.Extra).match(/speed\s*=\s*(\d+)/i),seconds=Math.max(35,Math.min(180,speed?Number(speed[1]):80));
+ tickerEl.style.setProperty("--ticker-duration",seconds+"s");
+ tickerEl.classList.toggle("active",!!text);tickerEl.setAttribute("aria-hidden",text?"false":"true");document.body.classList.toggle("ticker-visible",!!text);
+ tickerEl.querySelectorAll(".special-ticker-copy").forEach(el=>el.textContent=text);
+}
 function render(rows,panelTable){
  const panel=panelData(panelTable);
  let items=rows.filter(r=>truthy(r.Active)&&clean(r.Screen_Suggestion)===TARGET_SCREEN&&!(TARGET_SCREEN==="Screen 3"&&/^(beverages|alcohol drinks)$/i.test(clean(r.Display_Category))));
@@ -181,7 +192,7 @@ function fail(m){statusEl.textContent="Connection error";content.innerHTML=`<div
 let masterRows=[],tacosPanel=null,badgesById=new Map();
 window.arlenesMenuCallback=function(resp){try{if(!resp||!resp.table)throw new Error("Google returned no table data.");masterRows=rowsFrom(resp.table);render(masterRows,tacosPanel)}catch(e){fail(e.message||String(e))}};
 window.arlenesTacosCallback=function(resp){if(resp&&resp.table){tacosPanel=resp.table;if(masterRows.length)render(masterRows,tacosPanel)}};
-window.arlenesFunctionsCallback=function(resp){if(resp&&resp.table){badgesById=new Map(rowsFrom(resp.table).filter(r=>clean(r.Menu_ID)).map(r=>[clean(r.Menu_ID),{crown:truthy(r.Crown),best:truthy(r["Best Seller"]),heart:truthy(r.Heart)}]));if(masterRows.length)render(masterRows,tacosPanel)}};
+window.arlenesFunctionsCallback=function(resp){if(resp&&resp.table){const functionRows=rowsFrom(resp.table);badgesById=new Map(functionRows.filter(r=>clean(r.Menu_ID)).map(r=>[clean(r.Menu_ID),{crown:truthy(r.Crown),best:truthy(r["Best Seller"]),heart:truthy(r.Heart)}]));updateTicker(functionRows);if(masterRows.length)render(masterRows,tacosPanel)}};
 function addSheetLoader(id,sheet,callback,headers){const old=document.getElementById(id);if(old)old.remove();const s=document.createElement("script");s.id=id;s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(sheet)+"&tqx=responseHandler:"+callback+"&tq="+encodeURIComponent("select *")+"&headers="+headers+"&_="+Date.now();s.onerror=()=>{if(sheet===SHEET_NAME)fail("The Google Sheets endpoint did not respond.")};document.body.appendChild(s)}
 function load(){statusEl.textContent="Syncing…";addSheetLoader("gsheet-loader",SHEET_NAME,"arlenesMenuCallback",1);addSheetLoader("tacos-panel-loader",TACOS_PANEL_SHEET,"arlenesTacosCallback",0);addSheetLoader("functions-loader",FUNCTIONS_SHEET,"arlenesFunctionsCallback",1)}
 load();setInterval(load,REFRESH_MS);
