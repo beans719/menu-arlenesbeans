@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"><title>Arlene's Beans — Screen 1</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"><title>Arlene's Beans — Screen 1</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet"><style>
 :root{--adobe:#e9dcc8;--paper:#fffaf1;--ink:#2b2119;--muted:#6e5b4a;--red:#9b302a;--green:#506b3f;--turquoise:#2f7773;--gold:#c28a3c;--line:rgba(43,33,25,.15)}
 *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}
 body{font-family:Segoe UI,Arial,sans-serif;color:var(--ink);background:linear-gradient(rgba(233,220,200,.97),rgba(233,220,200,.97)),repeating-linear-gradient(135deg,transparent 0 42px,rgba(47,119,115,.04) 42px 45px)}
@@ -9,8 +9,10 @@ body:before{top:0}body:after{bottom:0}
 h1{margin:0;font-family:Georgia,serif;font-size:5.5vw;line-height:.9}
 .kicker{margin-top:.6vh;font-size:1.5vw;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .screen-title{max-width:45vw;text-align:right;font-family:Georgia,serif;color:var(--red);font-weight:800;font-size:2.35vw}
-.content{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.72vh 1.55vw;align-content:start;padding-top:.85vh}
-.category{background:rgba(255,250,241,.9);border:1px solid var(--line);border-radius:15px;padding:.62vh 1.35vw .55vh}
+.content{flex:1;min-height:0;display:block;column-count:2;column-gap:1.55vw;column-fill:balance;padding-top:.85vh;overflow:hidden}
+.category{display:inline-block;width:100%;break-inside:avoid;vertical-align:top;margin:0 0 .72vh;background:rgba(255,250,241,.9);border:1px solid var(--line);border-radius:15px;padding:.62vh 1.35vw .55vh}
+.category.compact-category{align-self:start;height:auto;min-height:0}
+.category-head{display:flex;align-items:center;gap:.65vw}.category-head .category-title{flex:1}
 .category-title{display:flex;align-items:center;gap:.8vw;margin:0 0 .25vh;font-family:Georgia,serif;font-size:1.8vw;color:var(--red);font-weight:800}
 .category-title:after{content:"";height:2px;flex:1;background:rgba(155,48,42,.2)}
 .item{padding:.08vh 0 .16vh}.top{display:flex;align-items:baseline;gap:.5vw}
@@ -34,20 +36,61 @@ body.dense .protein-banner{padding:.28vh .42vw .34vh}body.dense .protein-heading
 body.ultra .protein-banner{margin:.12vh 0 .22vh;padding:.2vh .35vw .26vh}body.ultra .protein-heading{font-size:.48vw;margin-bottom:.14vh}body.ultra .protein-tags{gap:.2vw}body.ultra .protein-tag{font-size:.7vw;padding:.2vh .1vw;border-width:2px}
 .chile-options{margin:.16vh 0 .08vh;font-size:.76vw;font-weight:900;letter-spacing:.05em;line-height:1.08;color:var(--muted)}
 .chile-options .green{color:var(--green)}.chile-options .red{color:var(--red)}.chile-options .xmas{color:var(--turquoise)}
-body.dense .chile-options{font-size:.66vw}body.ultra .chile-options{font-size:.58vw;margin-top:.08vh}
+.section-chiles{flex:0 0 auto;font-size:.62vw;font-weight:900;letter-spacing:.035em;white-space:nowrap}.section-chiles .green{color:var(--green)}.section-chiles .red{color:var(--red)}.section-chiles .xmas{color:var(--turquoise)}
+.category-intro{margin:-.02vh 0 .32vh;color:var(--muted);font-size:.68vw;line-height:1.16;font-style:italic}
+.wing-options{margin:.16vh 0 .08vh;font-size:.76vw;font-weight:900;letter-spacing:.05em;line-height:1.08}.wing-options .buffalo{color:var(--red)}.wing-options .jalamango{color:var(--gold)}.wing-options .plain{color:var(--turquoise)}
+.combination-details{margin:.22vh 0 .08vh;padding:.28vh .45vw;border-left:3px solid rgba(194,138,60,.65);background:rgba(194,138,60,.055);font-size:.76vw;line-height:1.16}
+.combination-lead{margin-bottom:.18vh;color:var(--red);font-weight:900;text-transform:uppercase;letter-spacing:.035em}
+.combination-prices{display:grid;grid-template-columns:repeat(4,1fr);gap:.25vw;margin:.18vh 0 .3vh}.combination-price{padding:.22vh .15vw;border:2px solid rgba(80,107,63,.42);border-radius:9px;background:rgba(80,107,63,.07);text-align:center;color:var(--green);font-weight:900}.combination-price small{display:block;color:var(--muted);font-size:.55vw;text-transform:uppercase}.combination-price strong{font-size:.82vw}
+.combination-choice{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:.24vw;margin:.08vh 0;color:var(--muted)}
+.combination-name{color:var(--ink);font-weight:900}.solo-price{padding:.04vh .28vw;border-radius:999px;background:rgba(47,119,115,.1);color:var(--turquoise);font-size:.62vw;font-weight:900}.solo-price.combination-only{background:rgba(155,48,42,.09);color:var(--red)}.combination-choice .chile-options{display:inline;margin:0;font-size:.62vw}
+body.dense .chile-options,body.dense .wing-options{font-size:.66vw}body.ultra .chile-options,body.ultra .wing-options{font-size:.58vw;margin-top:.08vh}
+body.dense .combination-details{font-size:.66vw}body.ultra .combination-details{font-size:.56vw;line-height:1.1}
 body.dense .category-title{font-size:1.62vw}body.dense .name{font-size:1.18vw}body.dense .price{font-size:1.1vw}body.dense .desc{font-size:.82vw;line-height:1.18}
 body.ultra .header{padding-bottom:.6vh}body.ultra h1{font-size:4.8vw}body.ultra .kicker{font-size:1.2vw}body.ultra .screen-title{font-size:1.95vw}
-body.ultra .content{gap:.45vh 1.05vw;padding-top:.55vh}body.ultra .category{padding:.38vh .95vw .32vh;border-radius:12px}
+body.ultra .content{column-gap:1.05vw;padding-top:.55vh}body.ultra .category{margin-bottom:.45vh;padding:.38vh .95vw .32vh;border-radius:12px}
 body.ultra .category-title{font-size:1.4vw;margin-bottom:.08vh}body.ultra .item{padding:.02vh 0 .08vh}body.ultra .name{font-size:1.02vw}body.ultra .price{font-size:.98vw}body.ultra .desc{font-size:.7vw;line-height:1.14}body.ultra .footer{font-size:.72vw}
-@media(orientation:landscape){h1{font-size:3vw}.kicker{font-size:.8vw}.screen-title{font-size:1.4vw}.category-title{font-size:1.28vw}.name,.price{font-size:.92vw}.desc{font-size:.68vw;line-height:1.18}.chile-options{font-size:.62vw}.protein-tag{font-size:.9vw}}
+@media(orientation:landscape){h1{font-size:3vw}.kicker{font-size:.8vw}.screen-title{font-size:1.4vw}.category-title{font-size:1.28vw}.name,.price{font-size:.92vw}.desc{font-size:.68vw;line-height:1.18}.chile-options,.wing-options{font-size:.62vw}.protein-tag{font-size:.9vw}}
+/* Chimayo editorial system */
+:root{--paper:#F7F0E3;--ink:#352A20;--muted:#8A7A67;--red:#8C3B2E;--green:#57694A;--turquoise:#356F68;--gold:#B8863E;--line:rgba(53,42,32,.14)}
+body{font-family:'Work Sans',Segoe UI,Arial,sans-serif;background:var(--paper);color:var(--ink)}body:before,body:after{display:none}
+.screen{padding:2vh 3.2vw 1.4vh}.header{padding:.5vh 0 1vh;border-bottom:1px solid var(--line)}h1,.screen-title,.category-title{font-family:'Fraunces',Georgia,serif;font-weight:600}h1{letter-spacing:-.02em}.screen-title{color:var(--red)}
+.content{column-gap:2.1vw;padding-top:1vh}.category,.category.compact-category{display:inline-block;margin:0 0 1.05vh;padding:0;background:none;border:0;border-radius:0;box-shadow:none}.category-head{align-items:baseline;gap:.7vw;padding-bottom:.28vh;margin-bottom:.35vh;border-bottom:1px solid var(--line)}.category-title{display:block;margin:0;color:var(--red)}.category-title:after{display:none}
+.item{padding:.25vh 0 .32vh;border-bottom:1px solid rgba(53,42,32,.1)}.item:last-child{border-bottom:0}.top{align-items:center;gap:.38vw}.dots{border-bottom:1px dotted rgba(53,42,32,.2)}.name{color:var(--ink);font-weight:600}.price{color:var(--green);font-weight:600}.desc{color:var(--muted)}.variant{color:var(--turquoise);font-weight:600}.dietary{color:var(--ink);font-weight:500}
+.protein-banner{display:flex;align-items:baseline;gap:.55vw;margin:.12vh 0 .42vh;padding:0;background:none;border:0;border-radius:0}.protein-heading{flex:0 0 auto;margin:0;color:var(--red);font-size:.54vw;font-weight:600;letter-spacing:.11em}.protein-tags{display:flex;flex-wrap:wrap;align-items:baseline;gap:0;width:auto}.protein-tag,.protein-tag:nth-child(n),.protein-tag.upcharge{display:inline;color:var(--ink);background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:.76vw;font-weight:500;line-height:1.2;white-space:nowrap}.protein-tag:not(:last-child):after{content:' · ';color:var(--gold);padding:0 .25vw}
+.chile-options{display:inline-flex;align-items:center;gap:.18vw;margin:0 0 0 .12vw;font-size:0;vertical-align:middle}.chile-dot{display:inline-block;width:.42vw;height:.42vw;border-radius:50% 50% 50% 0;transform:rotate(45deg)}.chile-dot.c-green{background:var(--green)}.chile-dot.c-red{background:var(--red)}.chile-dot.c-xmas{background:var(--turquoise)}
+.section-chiles,.footer .chiles{display:flex;align-items:center;justify-content:center;gap:.65vw;color:var(--muted);font-weight:500}.chile-key{display:inline-flex;align-items:center;gap:.25vw}.section-chiles .chile-dot,.footer .chile-dot{width:.4vw;height:.4vw}.section-chiles{margin-left:auto;font-size:.59vw}.footer .chiles{font-size:.68vw}.category-intro{color:var(--muted);font-style:normal}
+.wing-options{color:var(--muted);font-weight:500}.wing-options .buffalo,.wing-options .jalamango,.wing-options .plain{color:var(--ink)}.combination-details{padding:.2vh 0 .18vh .55vw;background:none;border-left:2px solid var(--gold);color:var(--muted)}.combination-lead{color:var(--red);font-weight:600}.combination-price{padding:.18vh .1vw;background:none;border:1px solid rgba(87,105,74,.35);border-radius:5px;color:var(--green);font-weight:600}.combination-price strong{font-weight:600}.combination-name{color:var(--ink);font-weight:600}.solo-price,.solo-price.combination-only{padding:0;background:none;border-radius:0;color:var(--turquoise);font-weight:600}.solo-price.combination-only{color:var(--red)}.loading,.error{background:none;border:0}.footer{border-top:1px solid var(--line)}
+body.dense .protein-banner,body.ultra .protein-banner{padding:0;background:none;border:0}body.dense .protein-heading,body.ultra .protein-heading{font-size:.5vw;margin:0}body.dense .protein-tag,body.ultra .protein-tag{font-size:.68vw;padding:0;border:0}body.ultra .content{column-gap:1.25vw;padding-top:.55vh}body.ultra .category{padding:0;border-radius:0;margin-bottom:.5vh}body.ultra .item{padding:.12vh 0 .18vh}body.ultra .name{font-size:.92vw}body.ultra .price{font-size:.9vw}body.ultra .desc{font-size:.66vw;line-height:1.16}body[data-screen="Screen 2"] .item{padding:.42vh 0 .5vh}body[data-screen="Screen 2"] .category{margin-bottom:1.35vh}
+/* Portrait list layout */
+.content{display:flex;flex-direction:column;align-content:initial;column-count:auto;column-gap:0;column-fill:auto}.category,.category.compact-category{display:block;flex:0 0 auto;width:100%;margin-bottom:.7vh;break-inside:auto}.category-head{margin-bottom:.22vh}.item{display:block;width:100%;padding:.16vh 0 .22vh}.name{font-size:1.34vw}.price{font-size:1.2vw}.desc{width:100%;font-size:.84vw;line-height:1.18}.protein-banner{margin-bottom:.28vh}.protein-tag,.protein-tag:nth-child(n),.protein-tag.upcharge{font-size:.78vw}.combination-details{max-width:100%}.combination-prices{grid-template-columns:repeat(4,minmax(0,1fr));gap:.5vw}.combination-price strong{font-size:.88vw}body.dense .name{font-size:1.2vw}body.dense .price{font-size:1.1vw}body.dense .desc{font-size:.76vw}body.dense .protein-tag{font-size:.7vw}
+@media (orientation:portrait){html,body,.screen{width:100vw;height:100vh}.screen{padding:1.5vh 4.5vw 1.15vh}.header{padding:.35vh 0 .65vh}.content{display:flex!important;flex-direction:column!important;column-count:auto!important;overflow:hidden;padding-top:.45vh}.category,.category.compact-category{display:block!important;width:100%!important;margin-bottom:.42vh}.item{width:100%;padding:.1vh 0 .15vh}.category-title,body.dense .category-title{font-size:1.9vw}.name,body.dense .name{font-size:1.45vw}.price,body.dense .price{font-size:1.32vw}.desc,body.dense .desc{font-size:.96vw;line-height:1.16}.protein-heading,body.dense .protein-heading{font-size:.62vw}.protein-tag,body.dense .protein-tag{font-size:.9vw}.combination-details,body.dense .combination-details{font-size:.78vw}.combination-price small{font-size:.62vw}.combination-price strong{font-size:1vw}}
+/* Visual hierarchy revision */
+.protein-banner,body.dense .protein-banner,body.ultra .protein-banner{display:flex;align-items:baseline;gap:.75vw;margin:.16vh 0 .34vh;padding:0;border:0;border-radius:0;background:none}
+.protein-heading,body.dense .protein-heading,body.ultra .protein-heading{flex:0 0 auto;margin:0;color:var(--red);font-size:calc(.82vw + 2pt);font-weight:700;letter-spacing:.12em}
+.protein-tags,body.ultra .protein-tags{display:flex;flex-wrap:wrap;align-items:baseline;gap:0;width:100%}
+.protein-tag,.protein-tag:nth-child(n),.protein-tag.upcharge,body.dense .protein-tag,body.ultra .protein-tag{display:inline;color:var(--ink);padding:0;border:0;border-radius:0;background:none;box-shadow:none;font-size:calc(1.12vw + 2pt);font-weight:700;line-height:1.2}
+.protein-tag:not(:last-child):after{content:' · ';padding:0 .38vw;color:var(--gold)}
+.chile-options{gap:.45vw;margin-left:.32vw}.chile-dot{width:.82vw;height:.82vw}.section-chiles .chile-dot,.footer .chile-dot{width:.68vw;height:.68vw}.chile-dot.c-green{background:#2F8F55}.chile-dot.c-red{background:#C83F32}.chile-dot.c-xmas{background:linear-gradient(90deg,#2F8F55 0 50%,#C83F32 50% 100%)}
+.breakfast-hours{display:inline-block;margin-left:.38vw;color:var(--muted);font-size:1.05vw;font-weight:600}.breakfast-hours:before{content:'·';margin-right:.38vw;color:var(--gold)}
+.combination-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.18vh 1vw;margin-top:.28vh}
+.combination-choice{position:relative;display:block;margin:0;padding-left:1.05vw}
+.combination-choice:before{content:'•';position:absolute;left:.25vw;color:var(--gold);font-size:calc(1.15vw + 1pt);font-weight:700;line-height:1}
+.combination-choice .combination-name{margin-right:.28vw}
+.combination-details,body.dense .combination-details{font-size:calc(1vw + 1pt);line-height:1.22}.combination-name{font-size:calc(1.05vw + 1pt)}.solo-price,.solo-price.combination-only{font-size:calc(.78vw + 1pt)}.combination-price strong{font-size:1.08vw}
+.breakfast-category .category-head{justify-content:flex-start}.breakfast-category .category-head .category-title{flex:0 0 auto}
+.item,body.dense .item,body.ultra .item{border-bottom:0!important}
+.item-badges{display:inline-flex;align-items:center;gap:.3vw;margin-right:.42vw;vertical-align:.08em}.menu-badge{display:inline-flex;align-items:center;justify-content:center;color:var(--red);font-style:normal;font-weight:800;line-height:1;white-space:nowrap}.badge-crown{width:1.25vw;height:1.25vw;border:1px solid currentColor;border-radius:50%;font-size:.78vw}.badge-best{padding:.18em .48em;border-left:3px solid var(--gold);background:rgba(184,134,62,.1);font-size:.62vw;letter-spacing:.04em}.badge-heart{font-size:1.28vw;color:var(--red)}
+.combination-price{padding:.05vh .04vw;line-height:1}.combination-price small{font-size:.72vw;line-height:1}.combination-price strong{font-size:1.18vw;line-height:1}
 </style></head>
-<body data-screen="Screen 1"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Breakfast · Plates · Appetizers</div></header>
+<body data-screen="Screen 1"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Breakfast · Tacos · Plates</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
-<footer class="footer"><div>Screen 1 of 3</div><div class="chiles"><span class="red">RED</span> • <span class="green">GREEN</span> • <span class="xmas">CHRISTMAS</span></div><div id="status" class="status">Starting…</div></footer></main>
+<footer class="footer"><div>Screen 1 of 3</div><div class="chiles"><span class="chile-key"><i class="chile-dot c-green"></i>Green</span><span class="chile-key"><i class="chile-dot c-red"></i>Red</span><span class="chile-key"><i class="chile-dot c-xmas"></i>Christmas</span></div><div id="status" class="status">Starting…</div></footer></main>
 <script>
 const SPREADSHEET_ID = "1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU";
 const SHEET_NAME = "Menu_Master";
 const TACOS_PANEL_SHEET = "Tacos Panel de control";
+const FUNCTIONS_SHEET = "Functions";
 const TARGET_SCREEN = document.body.dataset.screen;
 const REFRESH_MS = 300000;
 const content = document.getElementById("content");
@@ -80,40 +123,77 @@ function tagsFor(item,panel){
  if(!tacoId&&!isProteinList)return "";
  const tags=panel.proteins.filter(p=>truthy(p.active)&&(isProteinList||clean(p.showOn).split(",").map(clean).includes(tacoId)));
  if(!tags.length)return "";
- return `<div class="protein-tags">${tags.map(p=>{const extra=clean(p.priceType).toLowerCase()==="upcharge",price=clean(p.price);return `<span class="protein-tag${extra?" upcharge":""}">${esc(p.name)}${extra&&price?" · "+esc(price):""}</span>`}).join("")}</div>`;
+ return `<div class="protein-tags">${tags.map(p=>{const extra=clean(p.priceType).toLowerCase()==="upcharge",price=/carne asada/i.test(clean(p.name))?"$2.99":clean(p.price);return `<span class="protein-tag${extra?" upcharge":""}">${esc(p.name)}${extra&&price?" +"+esc(price):""}</span>`}).join("")}</div>`;
 }
 function isProteinBanner(item){return ["protein available","available protein","available proteins"].includes(clean(item.Display_Name).toLowerCase())}
 function groupUsesProteins(name){
  const n=clean(name).toLowerCase();
- return n.includes("breakfast")||n.includes("appetizer")||n.includes("tacos")||n.includes("taquitos")||n.includes("plate")||n.includes("entrée")||n.includes("entree");
+ return n.includes("breakfast")||n.includes("appetizer")||n.includes("tacos")||n.includes("taquitos")||n.includes("burrito")||n.includes("plate")||n.includes("entrée")||n.includes("entree");
 }
 function proteinBanner(panel){
  const tags=tagsFor({Display_Name:"Protein Available"},panel);
- return tags?`<article class="protein-banner"><div class="protein-heading">Available proteins</div>${tags}</article>`:"";
+ return tags?`<article class="protein-banner"><div class="protein-heading">PROTEINS</div>${tags}</article>`:"";
 }
 const CHILE_ITEMS=new Set([
- "enchilada plate","enchilada bowl","relleno plate","tamale & relleno plate","tamale plate","frito pie","asada fries","chile cheese tots","chile cheese fries","los padilla breakfast burrito jr","los padilla smothered","breakfast chimichanga","huevos rancheros"
+ "enchilada plate","enchilada bowl","relleno plate","tamale & relleno plate","tamale plate","frito pie","asada fries","chile cheese tots","chile cheese fries","los padilla breakfast burrito jr","los padilla smothered breakfast burrito","breakfast chimichanga smothered","huevos rancheros","chile relleno solo with meat on top"
 ]);
 function chileOptions(item){
  const name=clean(item.Display_Name).toLowerCase().replace(/[.]+$/g,"");
- return CHILE_ITEMS.has(name)?`<div class="chile-options"><span class="green">GREEN</span> • <span class="red">RED</span> • <span class="xmas">CHRISTMAS</span></div>`:"";
+ if(name==="chicken wings")return `<div class="wing-options"><span class="buffalo">BUFFALO</span> • <span class="jalamango">JALAMANGO</span> • <span class="plain">PLAIN</span></div>`;
+ return CHILE_ITEMS.has(name)?`<span class="chile-options" aria-label="Green, red or Christmas chile"><i class="chile-dot c-green"></i><i class="chile-dot c-red"></i><i class="chile-dot c-xmas"></i></span>`:"";
 }
+function combinationDetails(item,description,priceDisplay){
+ if(clean(item.Display_Name).toLowerCase()!=="combination plate")return "";
+ const parts=clean(description).split("|").map(clean).filter(Boolean);
+ if(parts.length<2)return "";
+ const priceParts=clean(priceDisplay).split("/").map(clean).filter(Boolean);
+ const priceGrid=priceParts.length?`<div class="combination-prices">${priceParts.map(p=>{const m=p.match(/^(\d+)\s*items?\s*\$?(.+)$/i);return m?`<div class="combination-price"><small>${esc(m[1])} item${m[1]==="1"?"":"s"}</small><strong>$${esc(m[2])}</strong></div>`:`<div class="combination-price"><strong>${esc(p)}</strong></div>`}).join("")}</div>`:"";
+ const choices=`<div class="combination-choices">${parts.slice(1).map(line=>{
+   const i=line.indexOf(":"),rawName=clean(i>=0?line.slice(0,i):line),detail=i>=0?line.slice(i+1):"";
+   const badgeMatch=rawName.match(/\[([^\]]+)\]/),badge=badgeMatch?clean(badgeMatch[1]):"",name=clean(rawName.replace(/\s*\[[^\]]+\]\s*/," "));
+   const hasChile=false;
+   const badgeClass=/combination only/i.test(badge)?" combination-only":"";
+   return `<div class="combination-choice"><span class="combination-name">${esc(name)}</span>${badge?`<span class="solo-price${badgeClass}">${esc(badge)}</span>`:""}${hasChile?`<span class="chile-options" aria-label="Green, red or Christmas chile"><i class="chile-dot c-green"></i><i class="chile-dot c-red"></i><i class="chile-dot c-xmas"></i></span>`:""}${detail?`<span>${esc(detail)}</span>`:""}</div>`;
+ }).join("")}</div>`;
+ return `<div class="combination-details"><div class="combination-lead">${esc(parts[0])}</div>${priceGrid}${choices}</div>`;
+}
+function categoryClass(name){
+ const n=clean(name).toLowerCase();
+ if(n==="breakfast")return " breakfast-category";
+ return n==="chile"||n==="beverages"?" compact-category":"";
+}
+function categoryHeaderOptions(name){
+ const n=clean(name).toLowerCase();
+ if(n==="breakfast")return `<div class="breakfast-hours">Available until 2pm</div>`;
+ if(n!=="burritos in foil"&&n!=="smothered burritos")return "";
+ return `<div class="section-chiles"><span class="chile-key"><i class="chile-dot c-green"></i>Green</span><span class="chile-key"><i class="chile-dot c-red"></i>Red</span><span class="chile-key"><i class="chile-dot c-xmas"></i>Christmas</span></div>`;
+}
+function categoryIntro(name){
+ const n=clean(name).toLowerCase();
+ if(n==="burritos in foil")return `<div class="category-intro"><strong>Burrito Jr.:</strong> Smaller handheld burrito wrapped in foil—easy to grab and go.</div>`;
+ if(n==="smothered burritos")return `<div class="category-intro"><strong>Smothered Burrito:</strong> Flour-tortilla burrito covered with your choice of red, green or Christmas chile.</div>`;
+ return "";
+}
+function badgesFor(item){const b=badgesById.get(clean(item.Menu_ID));if(!b)return "";let out="";if(b.crown)out+=`<span class="menu-badge badge-crown" aria-label="House favorite">♛</span>`;if(b.best)out+=`<span class="menu-badge badge-best">BEST SELLER</span>`;if(b.heart)out+=`<span class="menu-badge badge-heart" aria-label="Favorite">♡</span>`;return out?`<span class="item-badges">${out}</span>`:""}
 function render(rows,panelTable){
  const panel=panelData(panelTable);
- let items=rows.filter(r=>truthy(r.Active)&&clean(r.Screen_Suggestion)===TARGET_SCREEN);
+ let items=rows.filter(r=>truthy(r.Active)&&clean(r.Screen_Suggestion)===TARGET_SCREEN&&!(TARGET_SCREEN==="Screen 3"&&/^(beverages|alcohol drinks)$/i.test(clean(r.Display_Category))));
  items.sort((a,b)=>(Number(a.Display_Order)||99999)-(Number(b.Display_Order)||99999)||clean(a.Display_Name).localeCompare(clean(b.Display_Name)));
  density(items);
  const groups=[],map=new Map();
  for(const item of items){const c=clean(item.Display_Category)||"Menu";if(!map.has(c)){const g={name:c,items:[]};map.set(c,g);groups.push(g)}map.get(c).items.push(item)}
+ const categoryOrder=["breakfast","tacos & taquitos","plates"];
+ groups.sort((a,b)=>categoryOrder.indexOf(clean(a.name).toLowerCase())-categoryOrder.indexOf(clean(b.name).toLowerCase()));
  if(!groups.length){content.innerHTML=`<div class="error"><strong>No items assigned to ${esc(TARGET_SCREEN)}.</strong><br>Check Active and Screen_Suggestion in Menu_Master.</div>`;return}
- content.innerHTML=groups.map(g=>`<section class="category"><h2 class="category-title">${esc(g.name)}</h2>${groupUsesProteins(g.name)?proteinBanner(panel):""}${g.items.map(item=>{if(isProteinBanner(item))return "";const p=priceOf(item),v=clean(item.Variant_or_Size),d=clean(item.Dietary),x=clean(item.Description);return `<article class="item"><div class="top"><span class="name">${esc(item.Display_Name)}</span>${p?`<span class="dots"></span><span class="price">${esc(p)}</span>`:""}</div>${chileOptions(item)}${(v||x||d)?`<div class="desc">${v?`<span class="variant">${esc(v)}</span>${x?" · ":""}`:""}${x?esc(x):""}${d?` <span class="dietary">(${esc(d)})</span>`:""}</div>`:""}${tagsFor(item,panel)}</article>`}).join("")}</section>`).join("");
+ content.innerHTML=groups.map(g=>`<section class="category${categoryClass(g.name)}"><div class="category-head"><h2 class="category-title">${esc(g.name)}</h2>${categoryHeaderOptions(g.name)}</div>${categoryIntro(g.name)}${groupUsesProteins(g.name)?proteinBanner(panel):""}${g.items.map(item=>{if(isProteinBanner(item))return "";const rawPrice=priceOf(item),itemName=clean(item.Display_Name).toLowerCase().replace(/[.]+$/g,""),hideBreakfastChileText=["los padilla breakfast burrito jr","los padilla smothered breakfast burrito","breakfast chimichanga smothered"].includes(itemName),hideVariant=["burritos in foil","smothered burritos"].includes(clean(g.name).toLowerCase())||hideBreakfastChileText,v=hideVariant?"":clean(item.Variant_or_Size),d=clean(item.Dietary),x=clean(item.Description),combo=combinationDetails(item,x,rawPrice),p=combo?"":rawPrice,chile=chileOptions(item);return `<article class="item"><div class="top"><span class="name">${badgesFor(item)}${esc(item.Display_Name)}</span>${chile}${p?`<span class="dots"></span><span class="price">${esc(p)}</span>`:""}</div>${combo||((v||x||d)?`<div class="desc">${v?`<span class="variant">${esc(v)}</span>${x?" · ":""}`:""}${x?esc(x):""}${d?` <span class="dietary">(${esc(d)})</span>`:""}</div>`:"")}${tagsFor(item,panel)}</article>`}).join("")}</section>`).join("");
  statusEl.textContent="Synced "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
 }
 function fail(m){statusEl.textContent="Connection error";content.innerHTML=`<div class="error"><strong>Google Sheets could not be loaded.</strong><br>${esc(m)}<br><small>Keep the Sheet shared as Anyone with the link – Viewer.</small></div>`}
-let masterRows=[],tacosPanel=null;
+let masterRows=[],tacosPanel=null,badgesById=new Map();
 window.arlenesMenuCallback=function(resp){try{if(!resp||!resp.table)throw new Error("Google returned no table data.");masterRows=rowsFrom(resp.table);render(masterRows,tacosPanel)}catch(e){fail(e.message||String(e))}};
 window.arlenesTacosCallback=function(resp){if(resp&&resp.table){tacosPanel=resp.table;if(masterRows.length)render(masterRows,tacosPanel)}};
+window.arlenesFunctionsCallback=function(resp){if(resp&&resp.table){badgesById=new Map(rowsFrom(resp.table).filter(r=>clean(r.Menu_ID)).map(r=>[clean(r.Menu_ID),{crown:truthy(r.Crown),best:truthy(r["Best Seller"]),heart:truthy(r.Heart)}]));if(masterRows.length)render(masterRows,tacosPanel)}};
 function addSheetLoader(id,sheet,callback,headers){const old=document.getElementById(id);if(old)old.remove();const s=document.createElement("script");s.id=id;s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(sheet)+"&tqx=responseHandler:"+callback+"&tq="+encodeURIComponent("select *")+"&headers="+headers+"&_="+Date.now();s.onerror=()=>{if(sheet===SHEET_NAME)fail("The Google Sheets endpoint did not respond.")};document.body.appendChild(s)}
-function load(){statusEl.textContent="Syncing…";addSheetLoader("gsheet-loader",SHEET_NAME,"arlenesMenuCallback",1);addSheetLoader("tacos-panel-loader",TACOS_PANEL_SHEET,"arlenesTacosCallback",0)}
+function load(){statusEl.textContent="Syncing…";addSheetLoader("gsheet-loader",SHEET_NAME,"arlenesMenuCallback",1);addSheetLoader("tacos-panel-loader",TACOS_PANEL_SHEET,"arlenesTacosCallback",0);addSheetLoader("functions-loader",FUNCTIONS_SHEET,"arlenesFunctionsCallback",1)}
 load();setInterval(load,REFRESH_MS);
 </script></body></html>
