@@ -107,10 +107,12 @@ body:before,body:after{display:none!important}
 .rigid-tv-canvas .solo-price{font-size:10.5px!important}
 .rigid-tv-canvas .section-chiles{font-size:12px!important}
 .rigid-tv-canvas .footer{font-size:12.5px!important}
+/* Image carousel ticker */
+.image-ticker{position:fixed;left:0;right:0;bottom:0;z-index:45;height:300px;display:none;overflow:hidden;background:#201912;border-top:3px solid var(--gold);box-shadow:0 -5px 18px rgba(53,42,32,.24)}.image-ticker.active{display:block}.image-ticker-track{display:flex;width:max-content;height:100%;animation:image-ticker-scroll var(--image-ticker-duration,70s) linear infinite;will-change:transform}.image-ticker-group{display:flex;flex:0 0 auto;gap:16px;padding-right:16px}.image-ticker-card{flex:0 0 300px;height:280px;margin:10px 0;overflow:hidden;border-radius:9px;background:#fffaf1;box-shadow:0 2px 8px rgba(0,0,0,.22)}.image-ticker-card img{display:block;width:300px;height:220px;object-fit:cover;background:#e9dcc8}.image-ticker-caption{height:60px;display:flex;align-items:center;justify-content:center;padding:6px 12px;text-align:center;color:var(--ink);font-family:'Work Sans',Segoe UI,Arial,sans-serif;font-size:20px;font-weight:700;line-height:1.12}.image-ticker-card.image-error{display:none}@keyframes image-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}body.image-ticker-visible .screen{padding-bottom:316px!important}
 </style></head>
 <body data-screen="Screen 3"><div class="rigid-tv-canvas"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Appetizers · Family Style · Bulk · Sides / Add-ons · Chile · Dessert</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
-<footer class="footer"><div>Screen 3 of 3</div><div class="chiles"><span class="chile-key"><i class="chile-dot c-green"></i>Green</span><span class="chile-key"><i class="chile-dot c-red"></i>Red</span><span class="chile-key"><i class="chile-dot c-xmas"></i>Christmas</span></div><div id="status" class="status">Starting…</div></footer></main>
+<footer class="footer"><div>Screen 3 of 3</div><div class="chiles"><span class="chile-key"><i class="chile-dot c-green"></i>Green</span><span class="chile-key"><i class="chile-dot c-red"></i>Red</span><span class="chile-key"><i class="chile-dot c-xmas"></i>Christmas</span></div><div id="status" class="status">Starting…</div></footer></main><aside id="image-ticker" class="image-ticker" aria-hidden="true"><div class="image-ticker-track"></div></aside>
 </div><script>
 (function fitRigidLeft(){
   function fitCanvas(){
@@ -125,10 +127,12 @@ const SPREADSHEET_ID = "1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU";
 const SHEET_NAME = "Menu_Master";
 const TACOS_PANEL_SHEET = "Tacos Panel de control";
 const FUNCTIONS_SHEET = "Functions";
+const IMAGE_TICKER_SHEET = "Image Ticker";
 const TARGET_SCREEN = document.body.dataset.screen;
 const REFRESH_MS = 300000;
 const content = document.getElementById("content");
 const statusEl = document.getElementById("status");
+const imageTickerEl = document.getElementById("image-ticker");
 const clean=v=>(v===null||v===undefined?"":String(v).trim());
 const truthy=v=>v===true||v===1||v==="1"||clean(v).toLowerCase()==="true";
 const esc=s=>clean(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
@@ -207,6 +211,13 @@ function categoryIntro(name){
  return "";
 }
 function badgesFor(item){const b=badgesById.get(clean(item.Menu_ID));if(!b)return "";let out="";if(b.crown)out+=`<span class="menu-badge badge-crown" aria-label="House favorite">♛</span>`;if(b.best)out+=`<span class="menu-badge badge-best">BEST SELLER</span>`;if(b.heart)out+=`<span class="menu-badge badge-heart" aria-label="Favorite">♡</span>`;return out?`<span class="item-badges">${out}</span>`:""}
+function updateImageTicker(rows){
+ const setting=rows.find(r=>clean(r.Setting).toLowerCase()==="scroll_speed"),speed=Math.max(25,Math.min(180,Number(setting&&setting.Value)||70));
+ const source=rows.filter(r=>truthy(r.Active)&&truthy(r[TARGET_SCREEN])&&clean(r.Image_URL)).sort((a,b)=>(Number(a.Display_Order)||99999)-(Number(b.Display_Order)||99999));
+ const active=source.length>0;imageTickerEl.classList.toggle("active",active);imageTickerEl.setAttribute("aria-hidden",active?"false":"true");document.body.classList.toggle("image-ticker-visible",active);
+ if(!active){imageTickerEl.querySelector(".image-ticker-track").innerHTML="";return}
+ const items=[];while(items.length<Math.max(4,source.length))items.push(...source);const cards=items.map(r=>`<article class="image-ticker-card"><img src="${esc(r.Image_URL)}" alt="${esc(r.Description)}" onerror="this.closest('.image-ticker-card').classList.add('image-error')"><div class="image-ticker-caption">${esc(r.Description)}</div></article>`).join("");const track=imageTickerEl.querySelector(".image-ticker-track");track.style.setProperty("--image-ticker-duration",speed+"s");track.innerHTML=`<div class="image-ticker-group">${cards}</div><div class="image-ticker-group" aria-hidden="true">${cards}</div>`;
+}
 function renderMenuItem(item,groupName,panel){
  if(isProteinBanner(item))return "";
  const rawPrice=priceOf(item),hideVariant=["burritos in foil","smothered burritos"].includes(clean(groupName).toLowerCase()),v=hideVariant?"":clean(item.Variant_or_Size),d=clean(item.Dietary),x=clean(item.Description),combo=combinationDetails(item,x,rawPrice),p=combo?"":rawPrice,chile=chileOptions(item);
@@ -241,7 +252,8 @@ let masterRows=[],tacosPanel=null,badgesById=new Map();
 window.arlenesMenuCallback=function(resp){try{if(!resp||!resp.table)throw new Error("Google returned no table data.");masterRows=rowsFrom(resp.table);render(masterRows,tacosPanel)}catch(e){fail(e.message||String(e))}};
 window.arlenesTacosCallback=function(resp){if(resp&&resp.table){tacosPanel=resp.table;if(masterRows.length)render(masterRows,tacosPanel)}};
 window.arlenesFunctionsCallback=function(resp){if(resp&&resp.table){badgesById=new Map(rowsFrom(resp.table).filter(r=>clean(r.Menu_ID)).map(r=>[clean(r.Menu_ID),{crown:truthy(r.Crown),best:truthy(r["Best Seller"]),heart:truthy(r.Heart)}]));if(masterRows.length)render(masterRows,tacosPanel)}};
+window.arlenesImageTickerCallback=function(resp){if(resp&&resp.table)updateImageTicker(rowsFrom(resp.table))};
 function addSheetLoader(id,sheet,callback,headers){const old=document.getElementById(id);if(old)old.remove();const s=document.createElement("script");s.id=id;s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(sheet)+"&tqx=responseHandler:"+callback+"&tq="+encodeURIComponent("select *")+"&headers="+headers+"&_="+Date.now();s.onerror=()=>{if(sheet===SHEET_NAME)fail("The Google Sheets endpoint did not respond.")};document.body.appendChild(s)}
-function load(){statusEl.textContent="Syncing…";addSheetLoader("gsheet-loader",SHEET_NAME,"arlenesMenuCallback",1);addSheetLoader("tacos-panel-loader",TACOS_PANEL_SHEET,"arlenesTacosCallback",0);addSheetLoader("functions-loader",FUNCTIONS_SHEET,"arlenesFunctionsCallback",1)}
+function load(){statusEl.textContent="Syncing…";addSheetLoader("gsheet-loader",SHEET_NAME,"arlenesMenuCallback",1);addSheetLoader("tacos-panel-loader",TACOS_PANEL_SHEET,"arlenesTacosCallback",0);addSheetLoader("functions-loader",FUNCTIONS_SHEET,"arlenesFunctionsCallback",1);addSheetLoader("image-ticker-loader",IMAGE_TICKER_SHEET,"arlenesImageTickerCallback",1)}
 load();setInterval(load,REFRESH_MS);
 </script></body></html>
