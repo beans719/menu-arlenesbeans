@@ -72,8 +72,52 @@ body.ultra .category-title{font-size:1.4vw;margin-bottom:.08vh}body.ultra .item{
 .dual-frame .compact-column{min-width:0}.dual-frame .compact-column+ .compact-column{margin-left:1.1vw;padding-left:1.1vw;border-left:1px solid var(--line)}
 .compact-frame .name{font-size:1.22vw}.compact-frame .price{font-size:1.14vw}.compact-frame .desc{font-size:.8vw}
 .item-badges{display:inline-flex;align-items:center;gap:.3vw;margin-right:.42vw;vertical-align:.08em}.menu-badge{display:inline-flex;align-items:center;justify-content:center;color:var(--red);font-style:normal;font-weight:800;line-height:1;white-space:nowrap}.badge-crown{width:1.25vw;height:1.25vw;border:1px solid currentColor;border-radius:50%;font-size:.78vw}.badge-best{padding:.18em .48em;border-left:3px solid var(--gold);background:rgba(184,134,62,.1);font-size:.62vw;letter-spacing:.04em}.badge-heart{font-size:1.28vw;color:var(--red)}
+/* Fire TV portrait bridge: creates a true 1080 x 1920 viewport inside a landscape Firestick signal. */
+html.firetv-landscape-host body{background:#000!important}
+html.firetv-landscape-host body:before,html.firetv-landscape-host body:after{display:none!important}
+.firetv-frame-stage{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden;background:#000}
+.firetv-portrait-frame{width:1080px;height:1920px;border:0;background:var(--paper);transform-origin:center center}
 </style></head>
-<body data-screen="Screen 3"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Appetizers · Family Style · Bulk · Sides / Add-ons · Chile · Dessert</div></header>
+<body data-screen="Screen 3"><script>
+(function startFireTvPortraitMode(){
+  const query=new URLSearchParams(location.search);
+  const fireTvRequested=query.get("firetv")==="1"||/AFT|Silk\//i.test(navigator.userAgent);
+  if(!fireTvRequested||!matchMedia("(orientation: landscape)").matches||query.get("portraitFrame")==="1")return;
+  document.documentElement.classList.add("firetv-landscape-host");
+  const screenNumber=Number((document.body.dataset.screen.match(/\d+/)||["1"])[0]);
+  const storageKey="arlenes-display-screen-"+screenNumber;
+  let finished=false;
+  function applyDisplaySettings(settings){
+    if(finished)return; finished=true;
+    try{localStorage.setItem(storageKey,JSON.stringify(settings))}catch(e){}
+    const override=query.get("rotate");
+    const orientation=override==="left"?"Rotate Left":override==="right"?"Rotate Right":override==="none"?"No Rotation":settings.orientation;
+    const scalePercent=Math.max(90,Math.min(100,parseFloat(query.get("scale")||settings.scale)||100))/100;
+    if(orientation==="No Rotation"){document.documentElement.classList.remove("firetv-landscape-host");setInterval(()=>location.reload(),300000);return}
+    const direction=orientation==="Rotate Left"?-90:90;
+    function mount(){
+    const source=new URL(location.href); source.searchParams.set("portraitFrame","1");
+    const stage=document.createElement("div"); stage.className="firetv-frame-stage";
+    const frame=document.createElement("iframe"); frame.className="firetv-portrait-frame";
+    frame.title="Arlene's Beans portrait menu"; frame.src=source.href; stage.appendChild(frame);
+    document.body.replaceChildren(stage);
+    function fitPortraitMenu(){const scale=Math.min(innerWidth/1920,innerHeight/1080)*scalePercent;frame.style.transform=`rotate(${direction}deg) scale(${scale})`}
+    fitPortraitMenu(); addEventListener("resize",fitPortraitMenu,{passive:true});
+    setInterval(()=>location.reload(),300000);
+    }
+    if(document.readyState==="loading")addEventListener("DOMContentLoaded",mount,{once:true});else mount();
+  }
+  window.arlenesDisplaySettingsBoot=function(resp){
+    const rows=resp&&resp.table&&resp.table.rows||[];
+    const cell=(row,col)=>rows[row]&&rows[row].c[col]&&rows[row].c[col].v;
+    applyDisplaySettings({orientation:String(cell(0,screenNumber+1)||"Automatic"),scale:String(cell(1,screenNumber+1)||"100%")});
+  };
+  const loader=document.createElement("script");
+  loader.src="https://docs.google.com/spreadsheets/d/1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU/gviz/tq?sheet=Functions&range=A10:E11&headers=0&tqx=responseHandler:arlenesDisplaySettingsBoot&_="+Date.now();
+  document.head.appendChild(loader);
+  setTimeout(function(){let saved={orientation:"Automatic",scale:"100%"};try{saved=JSON.parse(localStorage.getItem(storageKey))||saved}catch(e){}applyDisplaySettings(saved)},2500);
+})();
+</script><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Appetizers · Family Style · Bulk · Sides / Add-ons · Chile · Dessert</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
 <footer class="footer"><div>Screen 3 of 3</div><div class="chiles"><span class="chile-key"><i class="chile-dot c-green"></i>Green</span><span class="chile-key"><i class="chile-dot c-red"></i>Red</span><span class="chile-key"><i class="chile-dot c-xmas"></i>Christmas</span></div><div id="status" class="status">Starting…</div></footer></main>
 <script>
