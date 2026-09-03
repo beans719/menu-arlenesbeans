@@ -78,19 +78,24 @@ html.firetv-landscape-host body:before,html.firetv-landscape-host body:after{dis
 <body data-screen="Screen 2"><script>
 (function startFireTvPortraitMode(){
   const query=new URLSearchParams(location.search);
-  const fireTvRequested=query.get("firetv")==="1"||/AFT|Silk\//i.test(navigator.userAgent);
-  if(!fireTvRequested||!matchMedia("(orientation: landscape)").matches||query.get("portraitFrame")==="1")return;
+  const detectedTv=query.get("firetv")==="1"||/AFT|Silk\/|Android.+TV|SMART-TV|SmartTV|HbbTV|NetCast|Web0S|Tizen|CrKey/i.test(navigator.userAgent);
+  if(!matchMedia("(orientation: landscape)").matches||query.get("portraitFrame")==="1")return;
   document.documentElement.classList.add("firetv-landscape-host");
   const screenNumber=Number((document.body.dataset.screen.match(/\d+/)||["1"])[0]);
   const storageKey="arlenes-display-screen-"+screenNumber;
-  let finished=false;
-  function applyDisplaySettings(settings){
-    if(finished)return; finished=true;
+  let finished=false,appliedSignature="";
+  function applyDisplaySettings(settings,isLive){
+    const signature=String(settings.orientation)+"|"+String(settings.scale);
+    if(finished){
+      if(isLive&&signature!==appliedSignature){try{localStorage.setItem(storageKey,JSON.stringify(settings))}catch(e){}location.reload()}
+      return;
+    }
+    finished=true; appliedSignature=signature;
     try{localStorage.setItem(storageKey,JSON.stringify(settings))}catch(e){}
     const override=query.get("rotate");
     const orientation=override==="left"?"Rotate Left":override==="right"?"Rotate Right":override==="none"?"No Rotation":settings.orientation;
     const scalePercent=Math.max(90,Math.min(100,parseFloat(query.get("scale")||settings.scale)||100))/100;
-    if(orientation==="No Rotation"){document.documentElement.classList.remove("firetv-landscape-host");setInterval(()=>location.reload(),300000);return}
+    if(orientation==="No Rotation"||(orientation==="Automatic"&&!detectedTv)){document.documentElement.classList.remove("firetv-landscape-host");setInterval(()=>location.reload(),300000);return}
     const direction=orientation==="Rotate Left"?-90:90;
     function mount(){
     const source=new URL(location.href); source.searchParams.set("portraitFrame","1");
@@ -107,12 +112,12 @@ html.firetv-landscape-host body:before,html.firetv-landscape-host body:after{dis
   window.arlenesDisplaySettingsBoot=function(resp){
     const rows=resp&&resp.table&&resp.table.rows||[];
     const cell=(row,col)=>rows[row]&&rows[row].c[col]&&rows[row].c[col].v;
-    applyDisplaySettings({orientation:String(cell(0,screenNumber+1)||"Automatic"),scale:String(cell(1,screenNumber+1)||"100%")});
+    applyDisplaySettings({orientation:String(cell(0,screenNumber+1)||"Automatic"),scale:String(cell(1,screenNumber+1)||"100%")},true);
   };
   const loader=document.createElement("script");
   loader.src="https://docs.google.com/spreadsheets/d/1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU/gviz/tq?sheet=Functions&range=A10:E11&headers=0&tqx=responseHandler:arlenesDisplaySettingsBoot&_="+Date.now();
   document.head.appendChild(loader);
-  setTimeout(function(){let saved={orientation:"Automatic",scale:"100%"};try{saved=JSON.parse(localStorage.getItem(storageKey))||saved}catch(e){}applyDisplaySettings(saved)},2500);
+  setTimeout(function(){let saved={orientation:"Automatic",scale:"100%"};try{saved=JSON.parse(localStorage.getItem(storageKey))||saved}catch(e){}applyDisplaySettings(saved,false)},8000);
 })();
 </script><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Burritos in Foil · Smothered Burritos</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
