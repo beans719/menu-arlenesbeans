@@ -76,19 +76,33 @@ body{display:block!important}
 body:before,body:after{display:none!important}
 .rigid-tv-canvas{position:fixed;left:50%;top:50%;margin-left:-540px;margin-top:-960px;width:1080px;height:1920px;overflow:hidden;background:var(--paper,#F7F0E3);transform-origin:center center;transform:rotate(-90deg) scale(var(--rigid-tv-scale,1));will-change:transform}
 .rigid-tv-canvas>.screen{width:1080px!important;height:1920px!important}
+/* One shared type scale, sized from the densest page (Screen 1). */
+.rigid-tv-canvas .category-title{font-size:24px!important}
+.rigid-tv-canvas .name{font-size:18px!important}
+.rigid-tv-canvas .price{font-size:16.5px!important}
+.rigid-tv-canvas .desc{font-size:12px!important;line-height:1.2!important}
+.rigid-tv-canvas .protein-heading{font-size:14px!important}
+.rigid-tv-canvas .protein-tag{font-size:17px!important}
+.rigid-tv-canvas .category-intro{font-size:11.5px!important}
+.rigid-tv-canvas .combination-details{font-size:13px!important;line-height:1.2!important}
+.rigid-tv-canvas .combination-name{font-size:13.5px!important}
+.rigid-tv-canvas .combination-price small{font-size:9px!important}
+.rigid-tv-canvas .combination-price strong{font-size:14px!important}
+.rigid-tv-canvas .solo-price{font-size:10.5px!important}
+.rigid-tv-canvas .section-chiles{font-size:10.5px!important}
+.rigid-tv-canvas .footer{font-size:11px!important}
 </style></head>
 <body data-screen="Screen 2"><div class="rigid-tv-canvas"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Burritos in Foil · Smothered Burritos</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
 <footer class="footer"><div>Screen 2 of 3</div><div class="chiles"><span class="chile-key"><i class="chile-dot c-green"></i>Green</span><span class="chile-key"><i class="chile-dot c-red"></i>Red</span><span class="chile-key"><i class="chile-dot c-xmas"></i>Christmas</span></div><div id="status" class="status">Starting…</div></footer></main><aside id="special-ticker" class="special-ticker" aria-hidden="true"><div class="special-ticker-track"><span class="special-ticker-copy"></span><span class="special-ticker-copy" aria-hidden="true"></span></div></aside>
 </div><script>
 (function fitRigidLeft(){
-  const canvas=document.querySelector('.rigid-tv-canvas');
-  function fit(){
+  function fitCanvas(){
     const scale=Math.min(window.innerWidth/1920,window.innerHeight/1080);
     document.documentElement.style.setProperty('--rigid-tv-scale',String(scale));
   }
-  fit();
-  window.addEventListener('resize',fit,{passive:true});
+  fitCanvas();
+  window.addEventListener('resize',fitCanvas,{passive:true});
 })();
 </script><script>
 const SPREADSHEET_ID = "1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU";
