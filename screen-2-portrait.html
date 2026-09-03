@@ -70,9 +70,9 @@ body.ultra .category-title{font-size:1.4vw;margin-bottom:.08vh}body.ultra .item{
 .item-proteins{display:flex;align-items:baseline;gap:.45vw;margin-top:.12vh;color:var(--muted)}.item-proteins-label{flex:0 0 auto;color:var(--red);font-size:.72vw;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.item-proteins .protein-tags{width:auto}.item-proteins .protein-tag,.item-proteins .protein-tag:nth-child(n),.item-proteins .protein-tag.upcharge{font-size:.9vw;font-weight:600}
 .special-ticker{position:fixed;left:0;right:0;bottom:0;z-index:40;height:3.25vh;display:none;align-items:center;overflow:hidden;background:#A51F25;color:#fff;border-top:1px solid rgba(255,255,255,.32);box-shadow:0 -3px 12px rgba(53,42,32,.18)}.special-ticker.active{display:flex}.special-ticker-track{display:flex;width:max-content;min-width:200%;animation:special-ticker-scroll var(--ticker-duration,80s) linear infinite;will-change:transform}.special-ticker-copy{flex:0 0 50%;padding-left:100vw;padding-right:5vw;font-size:1.25vw;font-weight:800;letter-spacing:.045em;white-space:nowrap;text-transform:none}@keyframes special-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}body.ticker-visible .screen{padding-bottom:4.15vh}body.ticker-visible .footer{margin-bottom:.15vh}
 /* Fire TV portrait bridge: creates a true 1080 x 1920 viewport inside a landscape Firestick signal. */
-html.firetv-landscape-host body{background:#000!important}
+html.firetv-landscape-host body{background:var(--paper,#F7F0E3)!important}
 html.firetv-landscape-host body:before,html.firetv-landscape-host body:after{display:none!important}
-.firetv-frame-stage{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden;background:#000}
+.firetv-frame-stage{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden;background:var(--paper,#F7F0E3)}
 .firetv-portrait-frame{width:1080px;height:1920px;border:0;background:var(--paper);transform-origin:center center}
 </style></head>
 <body data-screen="Screen 2"><script>
@@ -80,7 +80,6 @@ html.firetv-landscape-host body:before,html.firetv-landscape-host body:after{dis
   const query=new URLSearchParams(location.search);
   const detectedTv=query.get("firetv")==="1"||/AFT|Silk\/|Android.+TV|SMART-TV|SmartTV|HbbTV|NetCast|Web0S|Tizen|CrKey/i.test(navigator.userAgent);
   if(!matchMedia("(orientation: landscape)").matches||query.get("portraitFrame")==="1")return;
-  document.documentElement.classList.add("firetv-landscape-host");
   const screenNumber=Number((document.body.dataset.screen.match(/\d+/)||["1"])[0]);
   const storageKey="arlenes-display-screen-"+screenNumber;
   let finished=false,appliedSignature="";
@@ -94,24 +93,29 @@ html.firetv-landscape-host body:before,html.firetv-landscape-host body:after{dis
     try{localStorage.setItem(storageKey,JSON.stringify(settings))}catch(e){}
     const override=query.get("rotate");
     const orientation=override==="left"?"Rotate Left":override==="right"?"Rotate Right":override==="none"?"No Rotation":settings.orientation;
-    const scalePercent=Math.max(90,Math.min(100,parseFloat(query.get("scale")||settings.scale)||100))/100;
+    let scaleNumber=parseFloat(query.get("scale")||settings.scale);if(scaleNumber>0&&scaleNumber<=1.5)scaleNumber*=100;
+    const scalePercent=Math.max(90,Math.min(100,scaleNumber||100))/100;
     if(orientation==="No Rotation"||(orientation==="Automatic"&&!detectedTv)){document.documentElement.classList.remove("firetv-landscape-host");setInterval(()=>location.reload(),300000);return}
     const direction=orientation==="Rotate Left"?-90:90;
     function mount(){
     const source=new URL(location.href); source.searchParams.set("portraitFrame","1");
     const stage=document.createElement("div"); stage.className="firetv-frame-stage";
     const frame=document.createElement("iframe"); frame.className="firetv-portrait-frame";
-    frame.title="Arlene's Beans portrait menu"; frame.src=source.href; stage.appendChild(frame);
-    document.body.replaceChildren(stage);
+    frame.title="Arlene's Beans portrait menu"; stage.style.visibility="hidden"; stage.appendChild(frame);
+    let revealed=false;
+    frame.addEventListener("load",function(){
+      if(revealed)return;revealed=true;document.documentElement.classList.add("firetv-landscape-host");stage.style.visibility="visible";document.body.replaceChildren(stage);
+    },{once:true});
+    document.body.appendChild(stage);frame.src=source.href;
     function fitPortraitMenu(){const scale=Math.min(innerWidth/1920,innerHeight/1080)*scalePercent;frame.style.transform=`rotate(${direction}deg) scale(${scale})`}
     fitPortraitMenu(); addEventListener("resize",fitPortraitMenu,{passive:true});
-    setInterval(()=>location.reload(),300000);
+    setTimeout(()=>{if(!revealed)stage.remove()},15000);setInterval(()=>location.reload(),300000);
     }
     if(document.readyState==="loading")addEventListener("DOMContentLoaded",mount,{once:true});else mount();
   }
   window.arlenesDisplaySettingsBoot=function(resp){
     const rows=resp&&resp.table&&resp.table.rows||[];
-    const cell=(row,col)=>rows[row]&&rows[row].c[col]&&rows[row].c[col].v;
+    const cell=(row,col)=>{const c=rows[row]&&rows[row].c[col];return c&&(c.f!==undefined?c.f:c.v)};
     applyDisplaySettings({orientation:String(cell(0,screenNumber+1)||"Automatic"),scale:String(cell(1,screenNumber+1)||"100%")},true);
   };
   const loader=document.createElement("script");
