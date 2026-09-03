@@ -72,9 +72,9 @@ body.ultra .category-title{font-size:15.12px;margin-bottom:1.536px}body.ultra .i
 
 /* Rigid TV layout: one direct 1080x1920 canvas, rotated left without an iframe. */
 html,body{width:100%!important;height:100%!important;overflow:hidden!important;background:var(--paper,#F7F0E3)!important}
-body{display:grid!important;place-items:center!important}
+body{display:block!important}
 body:before,body:after{display:none!important}
-.rigid-tv-canvas{position:relative;width:1080px;height:1920px;flex:none;overflow:hidden;background:var(--paper,#F7F0E3);transform-origin:center center;transform:rotate(-90deg) scale(var(--rigid-tv-scale,1));will-change:transform}
+.rigid-tv-canvas{position:fixed;left:50%;top:50%;margin-left:-540px;margin-top:-960px;width:1080px;height:1920px;overflow:hidden;background:var(--paper,#F7F0E3);transform-origin:center center;transform:rotate(-90deg) scale(var(--rigid-tv-scale,1));will-change:transform}
 .rigid-tv-canvas>.screen{width:1080px!important;height:1920px!important}
 </style></head>
 <body data-screen="Screen 2"><div class="rigid-tv-canvas"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Burritos in Foil · Smothered Burritos</div></header>
