@@ -1,4 +1,15 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"><title>Arlene's Beans — Screen 2</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet"><style>
+/* ================================================================
+   GUÍA DEL CSS
+   1. Variables: colores reutilizados en todo el menú.
+   2. Base: tamaño del lienzo, tipografía y estructura general.
+   3. Menú: categorías, platillos, precios y descripciones.
+   4. Ajustes editoriales: apariencia Chimayo y jerarquía visual.
+   5. Cinta roja: anuncio móvil exclusivo de Screen 2.
+   6. TV: gira y escala el lienzo para la pantalla vertical.
+   7. Carrusel: fotografías móviles opcionales desde Google Sheets.
+   ================================================================ */
+/* 1. Variables de color y estilos base compartidos. */
 :root{--adobe:#e9dcc8;--paper:#fffaf1;--ink:#2b2119;--muted:#6e5b4a;--red:#9b302a;--green:#506b3f;--turquoise:#2f7773;--gold:#c28a3c;--line:rgba(43,33,25,.15)}
 *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}
 body{font-family:Segoe UI,Arial,sans-serif;color:var(--ink);background:linear-gradient(rgba(233,220,200,.97),rgba(233,220,200,.97)),repeating-linear-gradient(135deg,transparent 0 42px,rgba(47,119,115,.04) 42px 45px)}
@@ -68,7 +79,8 @@ body.ultra .category-title{font-size:15.12px;margin-bottom:1.536px}body.ultra .i
 .burrito-category .desc,body.dense .burrito-category .desc{font-size:calc(10.8px + 1pt)}
 .item-badges{display:inline-flex;align-items:center;gap:3.24px;margin-right:4.536px;vertical-align:.08em}.menu-badge{display:inline-flex;align-items:center;justify-content:center;color:#2166B1;font-style:normal;font-weight:800;line-height:1;white-space:nowrap}.badge-crown{width:calc(13.5px + 2pt);height:calc(13.5px + 2pt);border:1px solid currentColor;border-radius:50%;font-size:calc(8.424px + 2pt)}.badge-best{padding:.18em .48em;border-left:3px solid #2166B1;background:rgba(33,102,177,.1);font-size:calc(6.696px + 2pt);letter-spacing:.04em}.badge-heart{font-size:calc(13.824px + 2pt);color:#2166B1}
 .item-proteins{display:flex;align-items:baseline;gap:4.86px;margin-top:2.304px;color:var(--muted)}.item-proteins-label{flex:0 0 auto;color:var(--red);font-size:7.776px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.item-proteins .protein-tags{width:auto}.item-proteins .protein-tag,.item-proteins .protein-tag:nth-child(n),.item-proteins .protein-tag.upcharge{font-size:9.72px;font-weight:600}
-.special-ticker{position:fixed;left:0;right:0;bottom:0;z-index:40;height:62.4px;display:none;align-items:center;overflow:hidden;background:#A51F25;color:#fff;border-top:1px solid rgba(255,255,255,.32);box-shadow:0 -3px 12px rgba(53,42,32,.18)}.special-ticker.active{display:flex}.special-ticker-track{display:flex;width:max-content;min-width:200%;animation:special-ticker-scroll var(--ticker-duration,80s) linear infinite;will-change:transform}.special-ticker-copy{flex:0 0 50%;padding-left:1080px;padding-right:54px;font-size:13.5px;font-weight:800;letter-spacing:.045em;white-space:nowrap;text-transform:none}@keyframes special-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}body.ticker-visible .screen{padding-bottom:79.68px}body.ticker-visible .footer{margin-bottom:2.88px}
+/* 5. Cinta roja de Screen 2: aparece solo cuando la función Ticker está activa. */
+.special-ticker{position:fixed;left:0;right:0;bottom:0;z-index:40;height:62.4px;display:none;align-items:center;overflow:hidden;background:#A51F25;color:#fff;border-top:1px solid rgba(255,255,255,.32);box-shadow:0 -3px 12px rgba(53,42,32,.18)}.special-ticker.active{display:flex}.special-ticker-track{display:flex;align-items:center;width:max-content;min-width:200%;animation:special-ticker-scroll var(--ticker-duration,80s) linear infinite;will-change:transform}.special-ticker-copy{flex:0 0 50%;padding-left:1080px;padding-right:54px;font-size:24px;line-height:1.15;font-weight:800;letter-spacing:.035em;white-space:nowrap;text-transform:none}@keyframes special-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}body.ticker-visible .screen{padding-bottom:79.68px}body.ticker-visible .footer{margin-bottom:2.88px}
 
 /* Rigid TV layout: one direct 1080x1920 canvas, rotated left without an iframe. */
 html,body{width:100%!important;height:100%!important;overflow:hidden!important;background:var(--paper,#F7F0E3)!important}
@@ -104,13 +116,14 @@ body:before,body:after{display:none!important}
 .rigid-tv-canvas .solo-price{font-size:10.5px!important}
 .rigid-tv-canvas .section-chiles{font-size:12px!important}
 .rigid-tv-canvas .footer{font-size:12.5px!important}
-/* Image carousel ticker */
-.image-ticker{position:fixed;left:0;right:0;bottom:0;z-index:45;height:300px;display:none;overflow:hidden;background:#201912;border-top:3px solid var(--gold);box-shadow:0 -5px 18px rgba(53,42,32,.24)}.image-ticker.active{display:block}.image-ticker-track{display:flex;width:max-content;height:100%;animation:image-ticker-scroll var(--image-ticker-duration,70s) linear infinite;will-change:transform}.image-ticker-group{display:flex;flex:0 0 auto;gap:16px;padding-right:16px}.image-ticker-card{flex:0 0 300px;height:280px;margin:10px 0;overflow:hidden;border-radius:9px;background:#fffaf1;box-shadow:0 2px 8px rgba(0,0,0,.22)}.image-ticker-card img{display:block;width:300px;height:220px;object-fit:cover;background:#e9dcc8}.image-ticker-caption{height:60px;display:flex;align-items:center;justify-content:center;padding:6px 12px;text-align:center;color:var(--ink);font-family:'Work Sans',Segoe UI,Arial,sans-serif;font-size:20px;font-weight:700;line-height:1.12}.image-ticker-card.image-error{display:none}@keyframes image-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}body.image-ticker-visible .screen{padding-bottom:316px!important}body.image-ticker-visible .special-ticker{bottom:300px}body.image-ticker-visible.ticker-visible .screen{padding-bottom:395px!important}
+/* 7. Carrusel fotográfico opcional. Usa el mismo fondo crema del menú. */
+.image-ticker{position:fixed;left:0;right:0;bottom:0;z-index:45;height:300px;display:none;overflow:hidden;background:var(--paper,#F7F0E3);border-top:3px solid var(--gold);box-shadow:0 -5px 18px rgba(53,42,32,.24)}.image-ticker.active{display:block}.image-ticker-track{display:flex;width:max-content;height:100%;animation:image-ticker-scroll var(--image-ticker-duration,70s) linear infinite;will-change:transform}.image-ticker-group{display:flex;flex:0 0 auto;gap:16px;padding-right:16px}.image-ticker-card{flex:0 0 300px;height:280px;margin:10px 0;overflow:hidden;border-radius:9px;background:#fffaf1;box-shadow:0 2px 8px rgba(0,0,0,.22)}.image-ticker-card img{display:block;width:300px;height:220px;object-fit:cover;background:#e9dcc8}.image-ticker-caption{height:60px;display:flex;align-items:center;justify-content:center;padding:6px 12px;text-align:center;color:var(--ink);font-family:'Work Sans',Segoe UI,Arial,sans-serif;font-size:20px;font-weight:700;line-height:1.12}.image-ticker-card.image-error{display:none}@keyframes image-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}body.image-ticker-visible .screen{padding-bottom:316px!important}body.image-ticker-visible .special-ticker{bottom:300px}body.image-ticker-visible.ticker-visible .screen{padding-bottom:395px!important}
 </style></head>
 <body data-screen="Screen 2"><div class="rigid-tv-canvas"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Burritos in Foil · Smothered Burritos</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
 <footer class="footer"><div>Screen 2 of 3</div><div class="chiles"><span class="chile-key"><i class="chile-dot c-green"></i>Green</span><span class="chile-key"><i class="chile-dot c-red"></i>Red</span><span class="chile-key"><i class="chile-dot c-xmas"></i>Christmas</span></div><div id="status" class="status">Starting…</div></footer></main><aside id="special-ticker" class="special-ticker" aria-hidden="true"><div class="special-ticker-track"><span class="special-ticker-copy"></span><span class="special-ticker-copy" aria-hidden="true"></span></div></aside><aside id="image-ticker" class="image-ticker" aria-hidden="true"><div class="image-ticker-track"></div></aside>
 </div><script>
+/* Escala y gira el lienzo completo para llenar el televisor sin deformarlo. */
 (function fitRigidLeft(){
   function fitCanvas(){
     const scale=Math.min(window.innerWidth/1920,window.innerHeight/1080);
@@ -120,6 +133,15 @@ body:before,body:after{display:none!important}
   window.addEventListener('resize',fitCanvas,{passive:true});
 })();
 </script><script>
+/* ================================================================
+   GUÍA DEL JAVASCRIPT
+   - Configuración: nombres de hojas y frecuencia de actualización.
+   - Conversión: transforma la respuesta de Google Sheets en objetos.
+   - Menú: organiza categorías, precios, proteínas, chile e insignias.
+   - Cintas: controla el anuncio rojo y el carrusel de fotografías.
+   - Sincronización: vuelve a consultar las hojas cada cinco minutos.
+   ================================================================ */
+/* Configuración de las fuentes de datos. */
 const SPREADSHEET_ID = "1JnN8jjQyZrXqcHRye1z_mNPP7uXOjTYslwPSAmhdqdU";
 const SHEET_NAME = "Menu_Master";
 const TACOS_PANEL_SHEET = "Tacos Panel de control";
@@ -138,6 +160,7 @@ function val(cell){return !cell||cell.v===null||cell.v===undefined?"":cell.v}
 function rowsFrom(table){const h=table.cols.map((c,i)=>clean(c.label)||clean(c.id)||("COL_"+i));return table.rows.map(r=>{const o={};h.forEach((x,i)=>o[x]=val(r.c[i]));return o})}
 function priceOf(r){const p=clean(r.Price_Display);if(p)return p;const v=r.Base_Price;if(v===""||v==null)return "";const n=Number(String(v).replace(/[$,]/g,""));return Number.isFinite(n)?"$"+n.toFixed(2):clean(v)}
 function density(items){const score=items.length+items.filter(x=>clean(x.Description)).length*.38;document.body.classList.remove("dense","ultra");if(TARGET_SCREEN==="Screen 3"||score>46)document.body.classList.add("ultra");else if(score>30)document.body.classList.add("dense")}
+/* Convierte la hoja de control de tacos/proteínas en datos utilizables. */
 function panelData(table){
  if(!table)return {items:new Map(),proteins:[]};
  const raw=table.rows.map(r=>r.c.map(val)),items=new Map(),proteins=[];
@@ -216,6 +239,7 @@ function categoryIntro(name){
  return "";
 }
 function badgesFor(item){const b=badgesById.get(clean(item.Menu_ID));if(!b)return "";let out="";if(b.crown)out+=`<span class="menu-badge badge-crown" aria-label="House favorite">♛</span>`;if(b.best)out+=`<span class="menu-badge badge-best">BEST SELLER</span>`;if(b.heart)out+=`<span class="menu-badge badge-heart" aria-label="Favorite">♡</span>`;return out?`<span class="item-badges">${out}</span>`:""}
+/* Filtra las fotos marcadas para Screen 2 y crea un bucle visual infinito. */
 function updateImageTicker(rows){
  const setting=rows.find(r=>clean(r.Setting).toLowerCase()==="scroll_speed"),speed=Math.max(25,Math.min(180,Number(setting&&setting.Value)||70));
  const source=rows.filter(r=>truthy(r.Active)&&truthy(r[TARGET_SCREEN])&&clean(r.Image_URL)).sort((a,b)=>(Number(a.Display_Order)||99999)-(Number(b.Display_Order)||99999));
@@ -223,6 +247,7 @@ function updateImageTicker(rows){
  if(!active){imageTickerEl.querySelector(".image-ticker-track").innerHTML="";return}
  const items=[];while(items.length<Math.max(4,source.length))items.push(...source);const cards=items.map(r=>`<article class="image-ticker-card"><img src="${esc(r.Image_URL)}" alt="${esc(r.Description)}" onerror="this.closest('.image-ticker-card').classList.add('image-error')"><div class="image-ticker-caption">${esc(r.Description)}</div></article>`).join("");const track=imageTickerEl.querySelector(".image-ticker-track");track.style.setProperty("--image-ticker-duration",speed+"s");track.innerHTML=`<div class="image-ticker-group">${cards}</div><div class="image-ticker-group" aria-hidden="true">${cards}</div>`;
 }
+/* Lee el anuncio Ticker, su estado y velocidad desde la hoja Functions. */
 function updateTicker(functionRows){
  const row=functionRows.find(r=>clean(r.Function).toLowerCase()==="ticker");
  const enabled=!!row&&truthy(row.Active)&&truthy(row["screen 2"]);
@@ -232,6 +257,7 @@ function updateTicker(functionRows){
  tickerEl.classList.toggle("active",!!text);tickerEl.setAttribute("aria-hidden",text?"false":"true");document.body.classList.toggle("ticker-visible",!!text);
  tickerEl.querySelectorAll(".special-ticker-copy").forEach(el=>el.textContent=text);
 }
+/* Construye en pantalla las categorías y todos sus platillos. */
 function render(rows,panelTable){
  const panel=panelData(panelTable);
  let items=rows.filter(r=>truthy(r.Active)&&clean(r.Screen_Suggestion)===TARGET_SCREEN&&!(TARGET_SCREEN==="Screen 3"&&/^(beverages|alcohol drinks)$/i.test(clean(r.Display_Category))));
@@ -249,7 +275,9 @@ window.arlenesMenuCallback=function(resp){try{if(!resp||!resp.table)throw new Er
 window.arlenesTacosCallback=function(resp){if(resp&&resp.table){tacosPanel=resp.table;if(masterRows.length)render(masterRows,tacosPanel)}};
 window.arlenesFunctionsCallback=function(resp){if(resp&&resp.table){const functionRows=rowsFrom(resp.table);badgesById=new Map(functionRows.filter(r=>clean(r.Menu_ID)).map(r=>[clean(r.Menu_ID),{crown:truthy(r.Crown),best:truthy(r["Best Seller"]),heart:truthy(r.Heart)}]));updateTicker(functionRows);if(masterRows.length)render(masterRows,tacosPanel)}};
 window.arlenesImageTickerCallback=function(resp){if(resp&&resp.table)updateImageTicker(rowsFrom(resp.table))};
+/* Inserta cada consulta de Google Sheets y reemplaza la anterior para evitar caché. */
 function addSheetLoader(id,sheet,callback,headers){const old=document.getElementById(id);if(old)old.remove();const s=document.createElement("script");s.id=id;s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(sheet)+"&tqx=responseHandler:"+callback+"&tq="+encodeURIComponent("select *")+"&headers="+headers+"&_="+Date.now();s.onerror=()=>{if(sheet===SHEET_NAME)fail("The Google Sheets endpoint did not respond.")};document.body.appendChild(s)}
+/* Ejecuta la sincronización inicial y después la repite cada cinco minutos. */
 function load(){statusEl.textContent="Syncing…";addSheetLoader("gsheet-loader",SHEET_NAME,"arlenesMenuCallback",1);addSheetLoader("tacos-panel-loader",TACOS_PANEL_SHEET,"arlenesTacosCallback",0);addSheetLoader("functions-loader",FUNCTIONS_SHEET,"arlenesFunctionsCallback",1);addSheetLoader("image-ticker-loader",IMAGE_TICKER_SHEET,"arlenesImageTickerCallback",1)}
 load();setInterval(load,REFRESH_MS);
 </script></body></html>
