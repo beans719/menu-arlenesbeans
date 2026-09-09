@@ -117,9 +117,12 @@ body:before,body:after{display:none!important}
 .rigid-tv-canvas .solo-price{font-size:10.5px!important}
 .rigid-tv-canvas .section-chiles{font-size:12px!important}
 .rigid-tv-canvas .footer{font-size:12.5px!important}
-/* Image carousel ticker */
-.image-ticker{position:fixed;left:0;right:0;bottom:0;z-index:45;height:300px;display:none;overflow:hidden;background:var(--paper,#F7F0E3);border-top:3px solid var(--gold);box-shadow:0 -5px 18px rgba(53,42,32,.24)}
-.image-ticker.active{display:block}.image-ticker-track{display:flex;width:max-content;height:100%;animation:image-ticker-scroll var(--image-ticker-duration,70s) linear infinite;will-change:transform}.image-ticker-group{display:flex;flex:0 0 auto;gap:16px;padding-right:16px}.image-ticker-card{flex:0 0 300px;height:280px;margin:10px 0;overflow:hidden;border-radius:9px;background:#fffaf1;box-shadow:0 2px 8px rgba(0,0,0,.22)}.image-ticker-card img{display:block;width:300px;height:220px;object-fit:cover;background:#e9dcc8}.image-ticker-caption{height:60px;display:flex;align-items:center;justify-content:center;padding:6px 12px;text-align:center;color:var(--ink);font-family:'Work Sans',Segoe UI,Arial,sans-serif;font-size:20px;font-weight:700;line-height:1.12}.image-ticker-card.image-error{display:none}@keyframes image-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}body.image-ticker-visible .screen{padding-bottom:316px!important}
+/* Image carousel ticker.
+   LARGE keeps the original 300 px presentation.
+   COMPACT measures the live gap between the final menu line and the footer,
+   then scales the complete carousel proportionally so it cannot cover either. */
+.image-ticker{--ticker-height:300px;--ticker-bottom:0px;--ticker-card-width:300px;--ticker-card-height:280px;--ticker-card-margin:10px;--ticker-image-height:220px;--ticker-caption-height:60px;--ticker-caption-font:20px;position:fixed;left:0;right:0;bottom:var(--ticker-bottom);z-index:45;height:var(--ticker-height);display:none;overflow:hidden;background:var(--paper,#F7F0E3);border-top:3px solid var(--gold);box-shadow:0 -5px 18px rgba(53,42,32,.24)}
+.image-ticker.active{display:block}.image-ticker-track{display:flex;width:max-content;height:100%;animation:image-ticker-scroll var(--image-ticker-duration,70s) linear infinite;will-change:transform}.image-ticker-group{display:flex;flex:0 0 auto;gap:16px;padding-right:16px}.image-ticker-card{flex:0 0 var(--ticker-card-width);height:var(--ticker-card-height);margin:var(--ticker-card-margin) 0;overflow:hidden;border-radius:9px;background:#fffaf1;box-shadow:0 2px 8px rgba(0,0,0,.22)}.image-ticker-card img{display:block;width:var(--ticker-card-width);height:var(--ticker-image-height);object-fit:cover;background:#e9dcc8}.image-ticker-caption{height:var(--ticker-caption-height);display:flex;align-items:center;justify-content:center;padding:6px 12px;text-align:center;color:var(--ink);font-family:'Work Sans',Segoe UI,Arial,sans-serif;font-size:var(--ticker-caption-font);font-weight:700;line-height:1.12}.image-ticker-card.image-error{display:none}@keyframes image-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}body.image-ticker-visible:not(.image-ticker-compact) .screen{padding-bottom:316px!important}body.image-ticker-compact .screen{padding-bottom:16px!important}
 </style></head>
 <body data-screen="Screen 1"><div class="rigid-tv-canvas"><main class="screen"><header class="header"><div><h1>Arlene's Beans</h1><div class="kicker">New Mexican Kitchen</div></div><div class="screen-title">Breakfast · Tacos · Plates</div></header>
 <section id="content" class="content"><div class="loading">Connecting to Arlenes Menu…</div></section>
@@ -144,6 +147,7 @@ const REFRESH_MS = 300000;
 const content = document.getElementById("content");
 const statusEl = document.getElementById("status");
 const imageTickerEl = document.getElementById("image-ticker");
+let imageTickerMode="large";
 const clean=v=>(v===null||v===undefined?"":String(v).trim());
 const truthy=v=>v===true||v===1||v==="1"||clean(v).toLowerCase()==="true";
 const esc=s=>clean(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
@@ -224,13 +228,36 @@ function categoryIntro(name){
  return "";
 }
 function badgesFor(item){const b=badgesById.get(clean(item.Menu_ID));if(!b)return "";let out="";if(b.crown)out+=`<span class="menu-badge badge-crown" aria-label="House favorite">♛</span>`;if(b.best)out+=`<span class="menu-badge badge-best">BEST SELLER</span>`;if(b.heart)out+=`<span class="menu-badge badge-heart" aria-label="Favorite">♡</span>`;return out?`<span class="item-badges">${out}</span>`:""}
+/* Returns an element's vertical position inside the unrotated 1080 x 1920 canvas. */
+function canvasTop(el){let y=0;while(el&& !el.classList.contains("rigid-tv-canvas")){y+=el.offsetTop;el=el.offsetParent}return y}
+/* Applies LARGE or measures and scales COMPACT after the menu has rendered. */
+function layoutImageTicker(){
+ if(!imageTickerEl.classList.contains("active"))return;
+ const compact=imageTickerMode==="compact";
+ document.body.classList.toggle("image-ticker-compact",compact);
+ if(!compact){
+   [["--ticker-height","300px"],["--ticker-bottom","0px"],["--ticker-card-width","300px"],["--ticker-card-height","280px"],["--ticker-card-margin","10px"],["--ticker-image-height","220px"],["--ticker-caption-height","60px"],["--ticker-caption-font","20px"]].forEach(([k,v])=>imageTickerEl.style.setProperty(k,v));
+   imageTickerEl.hidden=false;return;
+ }
+ const finalLine=content.querySelector(".category:last-child .item:last-child")||content.querySelector(".category:last-child")||content;
+ const footer=document.querySelector(".footer"),lastBottom=canvasTop(finalLine)+finalLine.offsetHeight,footerTop=canvasTop(footer);
+ const safetyGap=12,available=Math.floor(footerTop-lastBottom-safetyGap),height=Math.min(300,Math.max(0,available));
+ /* If fewer than 96 px remain, hiding is safer than covering Combination Plate. */
+ if(height<96){imageTickerEl.hidden=true;return}
+ const cardHeight=Math.max(76,height-16),scale=cardHeight/280,cardWidth=Math.round(300*scale),imageHeight=Math.round(220*scale),captionHeight=cardHeight-imageHeight;
+ [["--ticker-height",height+"px"],["--ticker-bottom",(1920-footerTop)+"px"],["--ticker-card-width",cardWidth+"px"],["--ticker-card-height",cardHeight+"px"],["--ticker-card-margin","8px"],["--ticker-image-height",imageHeight+"px"],["--ticker-caption-height",captionHeight+"px"],["--ticker-caption-font",Math.max(11,Math.round(20*scale))+"px"]].forEach(([k,v])=>imageTickerEl.style.setProperty(k,v));
+ imageTickerEl.hidden=false;
+}
 function updateImageTicker(rows){
  const setting=rows.find(r=>clean(r.Setting).toLowerCase()==="scroll_speed"),speed=Math.max(25,Math.min(180,Number(setting&&setting.Value)||70));
+ /* Image Ticker sheet selector: Setting = carousel_size; Value = compact or large. */
+ const sizeSetting=rows.find(r=>["carousel_size","display_size"].includes(clean(r.Setting).toLowerCase()));
+ const requested=clean(sizeSetting&&sizeSetting.Value).toLowerCase();imageTickerMode=["compact","adjusted","ajustado"].includes(requested)?"compact":"large";
  const source=rows.filter(r=>truthy(r.Active)&&truthy(r[TARGET_SCREEN])&&clean(r.Image_URL)).sort((a,b)=>(Number(a.Display_Order)||99999)-(Number(b.Display_Order)||99999));
- const active=source.length>0;imageTickerEl.classList.toggle("active",active);imageTickerEl.setAttribute("aria-hidden",active?"false":"true");document.body.classList.toggle("image-ticker-visible",active);
- if(!active){imageTickerEl.querySelector(".image-ticker-track").innerHTML="";return}
+ const active=source.length>0;imageTickerEl.classList.toggle("active",active);imageTickerEl.setAttribute("aria-hidden",active?"false":"true");document.body.classList.toggle("image-ticker-visible",active);document.body.classList.toggle("image-ticker-compact",active&&imageTickerMode==="compact");
+ if(!active){imageTickerEl.hidden=false;imageTickerEl.querySelector(".image-ticker-track").innerHTML="";return}
  const items=[];while(items.length<Math.max(4,source.length))items.push(...source);const cards=items.map(r=>`<article class="image-ticker-card"><img src="${esc(r.Image_URL)}" alt="${esc(r.Description)}" onerror="this.closest('.image-ticker-card').classList.add('image-error')"><div class="image-ticker-caption">${esc(r.Description)}</div></article>`).join("");
- const track=imageTickerEl.querySelector(".image-ticker-track");track.style.setProperty("--image-ticker-duration",speed+"s");track.innerHTML=`<div class="image-ticker-group">${cards}</div><div class="image-ticker-group" aria-hidden="true">${cards}</div>`;
+ const track=imageTickerEl.querySelector(".image-ticker-track");track.style.setProperty("--image-ticker-duration",speed+"s");track.innerHTML=`<div class="image-ticker-group">${cards}</div><div class="image-ticker-group" aria-hidden="true">${cards}</div>`;requestAnimationFrame(layoutImageTicker);
 }
 function render(rows,panelTable){
  const panel=panelData(panelTable);
@@ -243,7 +270,7 @@ function render(rows,panelTable){
  groups.sort((a,b)=>categoryOrder.indexOf(clean(a.name).toLowerCase())-categoryOrder.indexOf(clean(b.name).toLowerCase()));
  if(!groups.length){content.innerHTML=`<div class="error"><strong>No items assigned to ${esc(TARGET_SCREEN)}.</strong><br>Check Active and Screen_Suggestion in Menu_Master.</div>`;return}
  content.innerHTML=groups.map(g=>`<section class="category${categoryClass(g.name)}"><div class="category-head"><h2 class="category-title">${esc(g.name)}</h2>${categoryHeaderOptions(g.name)}</div>${categoryIntro(g.name)}${groupUsesProteins(g.name)?proteinBanner(panel):""}${g.items.map(item=>{if(isProteinBanner(item))return "";const rawPrice=priceOf(item),itemName=clean(item.Display_Name).toLowerCase().replace(/[.]+$/g,""),hideBreakfastChileText=["los padilla breakfast burrito jr","los padilla smothered breakfast burrito","breakfast chimichanga smothered"].includes(itemName),hideVariant=["burritos in foil","smothered burritos"].includes(clean(g.name).toLowerCase())||hideBreakfastChileText,v=hideVariant?"":clean(item.Variant_or_Size),d=clean(item.Dietary),x=clean(item.Description),combo=combinationDetails(item,x,rawPrice),p=combo?"":rawPrice,chile=chileOptions(item);return `<article class="item"><div class="top"><span class="name">${badgesFor(item)}${esc(item.Display_Name)}</span>${chile}${p?`<span class="dots"></span><span class="price">${esc(p)}</span>`:""}</div>${combo||((v||x||d)?`<div class="desc">${v?`<span class="variant">${esc(v)}</span>${x?" · ":""}`:""}${x?esc(x):""}${d?` <span class="dietary">(${esc(d)})</span>`:""}</div>`:"")}${tagsFor(item,panel)}</article>`}).join("")}</section>`).join("");
- statusEl.textContent="Synced "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+ statusEl.textContent="Synced "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});requestAnimationFrame(layoutImageTicker);
 }
 function fail(m){statusEl.textContent="Connection error";content.innerHTML=`<div class="error"><strong>Google Sheets could not be loaded.</strong><br>${esc(m)}<br><small>Keep the Sheet shared as Anyone with the link – Viewer.</small></div>`}
 let masterRows=[],tacosPanel=null,badgesById=new Map();
