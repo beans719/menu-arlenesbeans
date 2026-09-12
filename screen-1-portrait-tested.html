@@ -100,11 +100,12 @@ body:before,body:after{display:none!important}
 .rigid-tv-canvas .name{font-size:21px!important}
 .rigid-tv-canvas .price{font-size:19px!important}
 .rigid-tv-canvas .desc{font-size:13.5px!important;line-height:1.18!important}
-.rigid-tv-canvas .protein-banner{gap:8px!important;margin:2px 0 4px!important}
+.rigid-tv-canvas .protein-banner{gap:2px!important;margin:2px 0 4px!important}
 .rigid-tv-canvas .protein-heading{font-size:15px!important}
-.rigid-tv-canvas .protein-tags{flex-wrap:nowrap!important;min-width:0!important}
-.rigid-tv-canvas .protein-tag{font-size:18px!important;min-width:0!important}
-.rigid-tv-canvas .protein-tag:not(:last-child):after{padding:0 3px!important}
+.rigid-tv-canvas .protein-tags{flex:1 1 auto!important;width:auto!important;flex-wrap:nowrap!important;justify-content:space-between!important;gap:0!important;min-width:0!important}
+.rigid-tv-canvas .protein-tag{font-size:22px!important;font-weight:900!important;letter-spacing:-.55px;min-width:0!important}
+.rigid-tv-canvas .protein-tag,.rigid-tv-canvas .protein-tag.upcharge{flex:0 0 auto!important}
+.rigid-tv-canvas .protein-tag:not(:last-child):after{content:'·'!important;padding:0 1px!important}
 .rigid-tv-canvas .category-intro{font-size:13px!important}
 .rigid-tv-canvas .combination-details{margin:2px 0!important;padding:2px 0 2px 7px!important;font-size:13.5px!important;line-height:1.1!important}
 .rigid-tv-canvas .combination-lead{margin-bottom:2px!important}
@@ -143,11 +144,31 @@ const TACOS_PANEL_SHEET = "Tacos Panel de control";
 const FUNCTIONS_SHEET = "Functions";
 const IMAGE_TICKER_SHEET = "Image Ticker";
 const TARGET_SCREEN = document.body.dataset.screen;
-const REFRESH_MS = 300000;
+const CHANGE_SIGNAL_SHEET = "Control Panel";
+const CHANGE_SIGNAL_RANGE = "H7";
+const SIGNAL_POLL_MS = 15000;
 const content = document.getElementById("content");
 const statusEl = document.getElementById("status");
 const imageTickerEl = document.getElementById("image-ticker");
 let imageTickerMode="large";
+let breakfastSettings={auto:false,manual:false};
+let lastBreakfastVisibility=null;
+const BREAKFAST_TIME_ZONE="America/Denver";
+const BREAKFAST_CUTOFF_MINUTES=14*60;
+function breakfastClockMinutes(){
+ const simulated=new URLSearchParams(location.search).get("breakfastTime");
+ if(simulated&&/^([01]?\d|2[0-3]):[0-5]\d$/.test(simulated)){const [h,m]=simulated.split(":").map(Number);return h*60+m}
+ const parts=new Intl.DateTimeFormat("en-US",{timeZone:BREAKFAST_TIME_ZONE,hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date());
+ const value=Object.fromEntries(parts.map(p=>[p.type,p.value]));
+ return Number(value.hour)*60+Number(value.minute);
+}
+function showBreakfastItems(){return breakfastSettings.auto?breakfastClockMinutes()<BREAKFAST_CUTOFF_MINUTES:breakfastSettings.manual}
+function breakfastHeading(name){return esc(name)}
+function refreshBreakfastAtBoundary(){
+ const visible=showBreakfastItems();
+ if(lastBreakfastVisibility!==null&&visible!==lastBreakfastVisibility&&masterRows.length)render(masterRows,tacosPanel);
+ lastBreakfastVisibility=visible;
+}
 const clean=v=>(v===null||v===undefined?"":String(v).trim());
 const truthy=v=>v===true||v===1||v==="1"||clean(v).toLowerCase()==="true";
 const esc=s=>clean(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
@@ -176,7 +197,7 @@ function tagsFor(item,panel){
  if(!tacoId&&!isProteinList)return "";
  const tags=panel.proteins.filter(p=>truthy(p.active)&&(isProteinList||clean(p.showOn).split(",").map(clean).includes(tacoId)));
  if(!tags.length)return "";
- return `<div class="protein-tags">${tags.map(p=>{const extra=clean(p.priceType).toLowerCase()==="upcharge",price=/carne asada/i.test(clean(p.name))?"$2.99":clean(p.price);return `<span class="protein-tag${extra?" upcharge":""}">${esc(p.name)}${extra&&price?" +"+esc(price):""}</span>`}).join("")}</div>`;
+ return `<div class="protein-tags">${tags.map(p=>{const extra=clean(p.priceType).toLowerCase()==="upcharge",price=/carne asada/i.test(clean(p.name))?"$2.99":clean(p.price);const displayName=/carne asada/i.test(clean(p.name))?"Asada":clean(p.name);return `<span class="protein-tag${extra?" upcharge":""}">${esc(displayName)}${extra&&price?" +"+esc(price):""}</span>`}).join("")}</div>`;
 }
 function isProteinBanner(item){return ["protein available","available protein","available proteins"].includes(clean(item.Display_Name).toLowerCase())}
 function groupUsesProteins(name){
@@ -261,6 +282,8 @@ function updateImageTicker(rows){
 }
 function render(rows,panelTable){
  const panel=panelData(panelTable);
+ const breakfastVisible=showBreakfastItems();
+ lastBreakfastVisibility=breakfastVisible;
  let items=rows.filter(r=>truthy(r.Active)&&clean(r.Screen_Suggestion)===TARGET_SCREEN&&!(TARGET_SCREEN==="Screen 3"&&/^(beverages|alcohol drinks)$/i.test(clean(r.Display_Category))));
  items.sort((a,b)=>(Number(a.Display_Order)||99999)-(Number(b.Display_Order)||99999)||clean(a.Display_Name).localeCompare(clean(b.Display_Name)));
  density(items);
@@ -269,16 +292,31 @@ function render(rows,panelTable){
  const categoryOrder=["breakfast","tacos & taquitos","plates"];
  groups.sort((a,b)=>categoryOrder.indexOf(clean(a.name).toLowerCase())-categoryOrder.indexOf(clean(b.name).toLowerCase()));
  if(!groups.length){content.innerHTML=`<div class="error"><strong>No items assigned to ${esc(TARGET_SCREEN)}.</strong><br>Check Active and Screen_Suggestion in Menu_Master.</div>`;return}
- content.innerHTML=groups.map(g=>`<section class="category${categoryClass(g.name)}"><div class="category-head"><h2 class="category-title">${esc(g.name)}</h2>${categoryHeaderOptions(g.name)}</div>${categoryIntro(g.name)}${groupUsesProteins(g.name)?proteinBanner(panel):""}${g.items.map(item=>{if(isProteinBanner(item))return "";const rawPrice=priceOf(item),itemName=clean(item.Display_Name).toLowerCase().replace(/[.]+$/g,""),hideBreakfastChileText=["los padilla breakfast burrito jr","los padilla smothered breakfast burrito","breakfast chimichanga smothered"].includes(itemName),hideVariant=["burritos in foil","smothered burritos"].includes(clean(g.name).toLowerCase())||hideBreakfastChileText,v=hideVariant?"":clean(item.Variant_or_Size),d=clean(item.Dietary),x=clean(item.Description),combo=combinationDetails(item,x,rawPrice),p=combo?"":rawPrice,chile=chileOptions(item);return `<article class="item"><div class="top"><span class="name">${badgesFor(item)}${esc(item.Display_Name)}</span>${chile}${p?`<span class="dots"></span><span class="price">${esc(p)}</span>`:""}</div>${combo||((v||x||d)?`<div class="desc">${v?`<span class="variant">${esc(v)}</span>${x?" · ":""}`:""}${x?esc(x):""}${d?` <span class="dietary">(${esc(d)})</span>`:""}</div>`:"")}${tagsFor(item,panel)}</article>`}).join("")}</section>`).join("");
+ content.innerHTML=groups.map(g=>{const isBreakfast=clean(g.name).toLowerCase()==="breakfast",showBreakfastContent=!isBreakfast||breakfastVisible;return `<section class="category${categoryClass(g.name)}"><div class="category-head"><h2 class="category-title">${breakfastHeading(g.name)}</h2>${categoryHeaderOptions(g.name)}</div>${categoryIntro(g.name)}${showBreakfastContent&&groupUsesProteins(g.name)?proteinBanner(panel):""}${showBreakfastContent?g.items.map(item=>{if(isProteinBanner(item))return "";const rawPrice=priceOf(item),itemName=clean(item.Display_Name).toLowerCase().replace(/[.]+$/g,""),hideBreakfastChileText=["los padilla breakfast burrito jr","los padilla smothered breakfast burrito","breakfast chimichanga smothered"].includes(itemName),hideVariant=["burritos in foil","smothered burritos"].includes(clean(g.name).toLowerCase())||hideBreakfastChileText,v=hideVariant?"":clean(item.Variant_or_Size),d=clean(item.Dietary),x=clean(item.Description),combo=combinationDetails(item,x,rawPrice),p=combo?"":rawPrice,chile=chileOptions(item);return `<article class="item"><div class="top"><span class="name">${badgesFor(item)}${esc(item.Display_Name)}</span>${chile}${p?`<span class="dots"></span><span class="price">${esc(p)}</span>`:""}</div>${combo||((v||x||d)?`<div class="desc">${v?`<span class="variant">${esc(v)}</span>${x?" · ":""}`:""}${x?esc(x):""}${d?` <span class="dietary">(${esc(d)})</span>`:""}</div>`:"")}${tagsFor(item,panel)}</article>`}).join(""):""}</section>`}).join("");
  statusEl.textContent="Synced "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});requestAnimationFrame(layoutImageTicker);
 }
 function fail(m){statusEl.textContent="Connection error";content.innerHTML=`<div class="error"><strong>Google Sheets could not be loaded.</strong><br>${esc(m)}<br><small>Keep the Sheet shared as Anyone with the link – Viewer.</small></div>`}
 let masterRows=[],tacosPanel=null,badgesById=new Map();
 window.arlenesMenuCallback=function(resp){try{if(!resp||!resp.table)throw new Error("Google returned no table data.");masterRows=rowsFrom(resp.table);render(masterRows,tacosPanel)}catch(e){fail(e.message||String(e))}};
 window.arlenesTacosCallback=function(resp){if(resp&&resp.table){tacosPanel=resp.table;if(masterRows.length)render(masterRows,tacosPanel)}};
-window.arlenesFunctionsCallback=function(resp){if(resp&&resp.table){badgesById=new Map(rowsFrom(resp.table).filter(r=>clean(r.Menu_ID)).map(r=>[clean(r.Menu_ID),{crown:truthy(r.Crown),best:truthy(r["Best Seller"]),heart:truthy(r.Heart)}]));if(masterRows.length)render(masterRows,tacosPanel)}};
+window.arlenesFunctionsCallback=function(resp){if(resp&&resp.table){const functionRows=rowsFrom(resp.table);badgesById=new Map(functionRows.filter(r=>clean(r.Menu_ID)).map(r=>[clean(r.Menu_ID),{crown:truthy(r.Crown),best:truthy(r["Best Seller"]),heart:truthy(r.Heart)}]));const breakfastRow=functionRows.find(r=>clean(r.Function).toLowerCase()==="breakfast_schedule");if(breakfastRow)breakfastSettings={auto:truthy(breakfastRow.Active),manual:truthy(breakfastRow["screen 1"])};if(masterRows.length)render(masterRows,tacosPanel)}};
 window.arlenesImageTickerCallback=function(resp){if(resp&&resp.table)updateImageTicker(rowsFrom(resp.table))};
 function addSheetLoader(id,sheet,callback,headers){const old=document.getElementById(id);if(old)old.remove();const s=document.createElement("script");s.id=id;s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(sheet)+"&tqx=responseHandler:"+callback+"&tq="+encodeURIComponent("select *")+"&headers="+headers+"&_="+Date.now();s.onerror=()=>{if(sheet===SHEET_NAME)fail("The Google Sheets endpoint did not respond.")};document.body.appendChild(s)}
 function load(){statusEl.textContent="Syncing…";addSheetLoader("gsheet-loader",SHEET_NAME,"arlenesMenuCallback",1);addSheetLoader("tacos-panel-loader",TACOS_PANEL_SHEET,"arlenesTacosCallback",0);addSheetLoader("functions-loader",FUNCTIONS_SHEET,"arlenesFunctionsCallback",1);addSheetLoader("image-ticker-loader",IMAGE_TICKER_SHEET,"arlenesImageTickerCallback",1)}
-load();setInterval(load,REFRESH_MS);
+let lastMenuChangeSignal=null;
+window.arlenesChangeSignalCallback=function(resp){
+ try{
+  const cell=resp&&resp.table&&resp.table.rows&&resp.table.rows[0]&&resp.table.rows[0].c&&resp.table.rows[0].c[0];
+  const signal=cell&&cell.v!==null&&cell.v!==undefined?String(cell.v):"";
+  if(lastMenuChangeSignal===null){lastMenuChangeSignal=signal;return}
+  if(signal!==lastMenuChangeSignal){lastMenuChangeSignal=signal;load()}
+ }catch(e){}
+};
+function checkMenuChangeSignal(){
+ const old=document.getElementById("menu-change-signal-loader");if(old)old.remove();
+ const s=document.createElement("script");s.id="menu-change-signal-loader";
+ s.src="https://docs.google.com/spreadsheets/d/"+SPREADSHEET_ID+"/gviz/tq?sheet="+encodeURIComponent(CHANGE_SIGNAL_SHEET)+"&range="+encodeURIComponent(CHANGE_SIGNAL_RANGE)+"&tqx=responseHandler:arlenesChangeSignalCallback&headers=0&_="+Date.now();
+ document.body.appendChild(s);
+}
+load();checkMenuChangeSignal();setInterval(checkMenuChangeSignal,SIGNAL_POLL_MS);setInterval(refreshBreakfastAtBoundary,15000);
 </script></body></html>
