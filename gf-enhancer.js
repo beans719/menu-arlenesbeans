@@ -46,8 +46,14 @@
   function apply(doc){
     if(!doc||!doc.head||!doc.body)return;
     if(!doc.getElementById('dietary-badge-style')){
+      const old=doc.getElementById('gf-friendly-test-style');if(old)old.remove();
       const style=doc.createElement('style');style.id='dietary-badge-style';style.textContent=BADGE_CSS;doc.head.appendChild(style);
     }
+    doc.querySelectorAll('.dietary').forEach(el=>{
+      if(el.querySelector('.gf-friendly-badge,.vegan-badge'))return;
+      const walker=doc.createTreeWalker(el,NodeFilter.SHOW_TEXT);const nodes=[];let current;
+      while((current=walker.nextNode()))nodes.push(current);nodes.forEach(node=>transformTextNode(node,doc));
+    });
     const walker=doc.createTreeWalker(doc.body,NodeFilter.SHOW_TEXT);const nodes=[];let current;
     while((current=walker.nextNode()))nodes.push(current);nodes.forEach(node=>transformTextNode(node,doc));
   }
