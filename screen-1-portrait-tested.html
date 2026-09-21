@@ -262,14 +262,11 @@ function categoryIntro(name){
  return "";
 }
 function badgesFor(item){
- const legacy=badgesById.get(clean(item.Menu_ID));
  const cms=clean(item.Badges).split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
  let out="";
- if(legacy&&legacy.crown)out+=`<span class="menu-badge badge-crown" aria-label="House favorite">♛</span>`;
- if((legacy&&legacy.best)||cms.includes("best seller"))out+=`<span class="menu-badge badge-best" aria-label="Best Seller"><span class="badge-star">★</span><span>BEST SELLER</span></span>`;
- if(legacy&&legacy.heart)out+=`<span class="menu-badge badge-heart" aria-label="Favorite">♡</span>`;
- if(cms.includes("featured"))out+=`<span class="menu-badge badge-featured" aria-label="Featured"><span class="badge-mark">◆</span><span>FEATURED</span></span>`;
- if(cms.includes("new"))out+=`<span class="menu-badge badge-new" aria-label="New"><span class="badge-mark">✦</span><span>NEW</span></span>`;
+ if(cms.includes("best seller"))out+=`<span class="menu-badge badge-best" aria-label="Best Seller"><span class="badge-star">★</span><span>BEST SELLER</span></span>`;
+ if(cms.includes("featured"))out+=`<span class="menu-badge badge-featured" aria-label="Featured"><span class="badge-symbol">◆</span><span>FEATURED</span></span>`;
+ if(cms.includes("new"))out+=`<span class="menu-badge badge-new" aria-label="New"><span class="badge-symbol">✦</span><span>NEW</span></span>`;
  return out?`<span class="item-badges">${out}</span>`:"";
 }
 function gfBadgeFor(item){
